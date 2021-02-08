@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private Stage primaryStage;
-
     private ViewController viewController;
 
     @Override
