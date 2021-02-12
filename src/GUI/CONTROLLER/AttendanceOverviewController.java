@@ -38,11 +38,5 @@ public class AttendanceOverviewController implements Initializable {
                 studentList.forEach(Student::updatePersonPane));
         Student.height.addListener((Observable, t1, t2) ->
                 studentList.forEach(Student::updatePersonPane));
-        Slider b = new Slider();
-        b.valueChangingProperty().addListener(v -> {Student.height.set(250*b.getValue());
-        Student.width.set(200*b.getValue());
-        studentList.forEach(Student::updatePersonPane);
-        });
-        flowPane.getChildren().add(b);
     }
 }
