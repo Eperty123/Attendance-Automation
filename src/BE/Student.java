@@ -14,8 +14,7 @@ import javafx.scene.text.Font;
 public class Student {
 
     private IntegerProperty studentId = new SimpleIntegerProperty(-1);
-    private StringProperty firstName = new SimpleStringProperty("");
-    private StringProperty lastName = new SimpleStringProperty("");
+    private StringProperty name = new SimpleStringProperty("");
     private StringProperty pictureUrl = new SimpleStringProperty("GUI/IMG/noIMG.png");
     public static final Font personPaneFont = Font.font("System Bold", 24);
     public static DoubleProperty width = new SimpleDoubleProperty(100);
@@ -40,25 +39,20 @@ public class Student {
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
     }
-    public Student(){
 
+    public Student(String name){
+        this.name.set(name);
     }
 
-    public Student(String firstName, String lastName){
-        this.firstName.set(firstName);
-        this.lastName.set(lastName);
-    }
-
-    public Student(int studentId, String firstName, String lastName){
+    public Student(int studentId, String name){
         this.studentId.set(studentId);
-        this.firstName.set(firstName);
-        this.lastName.set(lastName);
+        this.name.set(name);
 
     }
 
-    public Student(int studentId, String firstName, String lastName, String pictureUrl){
+    public Student(int studentId, String name, String pictureUrl){
         this.studentId.set(studentId);
-        this.firstName.set(name);
+        this.name.set(name);
         this.pictureUrl.set(pictureUrl);
     }
 
@@ -74,16 +68,16 @@ public class Student {
         this.studentId.set(studentId);
     }
 
-    public String getFirstName() {
-        return firstName.get();
+    public String getName() {
+        return name.get();
     }
 
-    public StringProperty firstNameProperty() {
-        return firstName;
+    public StringProperty nameProperty() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName.set(firstName);
+    public void setName(String name) {
+        this.name.set(name);
     }
 
     public String getPictureUrl() {
@@ -105,7 +99,7 @@ public class Student {
         imageView.setFitWidth(width.get());
 
         this.personPane.setCenter(imageView);
-        label.setText(firstName.getValue());
+        label.setText(name.getValue());
         BorderPane.setAlignment(label,Pos.CENTER);
         label.setFont(personPaneFont);
         this.personPane.setTop(label);
@@ -121,7 +115,7 @@ public class Student {
         imageView.setFitWidth(width.get());
         this.personPane.setCenter(imageView);
 
-        label.setText(firstName.getValue());
+        label.setText(name.getValue());
         label.setFont(personPaneFont);
         this.personPane.setTop(label);
         this.personPane.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 10;");
