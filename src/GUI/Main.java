@@ -10,14 +10,14 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private Stage primaryStage;
+
     private AttendanceOverviewController viewController;
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws Exception{
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AttendanceOverview.fxml"));
         Parent root = loader.load();
-        viewController = loader.getController();
-        viewController.createStudents();
+        this.viewController=loader.getController();
         //primaryStage.setTitle("Hello World");
         primaryStage.setTitle("Attendance Overview");
         primaryStage.setScene(new Scene(root));
