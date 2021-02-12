@@ -1,9 +1,11 @@
 package BE;
 
 import BE.Student;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -36,6 +38,10 @@ public class GUIHelper {
             // Add the elements (nodes) to the BorderPane.
             pane.setTop(studentName);
             pane.setCenter(picture);
+
+            // Adding styling.
+            pane.setPadding(new Insets(8, 8, 8, 8));
+            FlowPane.setMargin(pane, new Insets(10, 10, 10, 10));
 
             // Return the created BorderPane.
             return pane;
