@@ -1,131 +1,112 @@
 package BE;
 
-import javafx.beans.property.*;
-
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
-import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Font;
-
-
+/**
+ * The class responsible for defining Students.
+ * Use GUIHelper to create GUI stuff from the Student class.
+ */
 public class Student {
+    protected long id;
+    protected String firstName;
+    protected String lastName;
+    protected String picture;
 
-    private IntegerProperty studentId = new SimpleIntegerProperty(-1);
-    private StringProperty name = new SimpleStringProperty("");
-    private StringProperty pictureUrl = new SimpleStringProperty("GUI/IMG/noIMG.png");
-    public static final Font personPaneFont = Font.font("System Bold", 24);
-    public static DoubleProperty width = new SimpleDoubleProperty(100);
-    public static DoubleProperty height = new SimpleDoubleProperty(100);
-    public static final boolean PRESERVE_RATIO = true;
-    private BorderPane personPane = new BorderPane();
-    private ImageView imageView = new ImageView(pictureUrl.getValue());
-    private Label label = new Label("");
+    protected Absence mostAbsenceDay;
+    protected Absence totalAbsence;
 
-    public Label getLabel() {
-        return label;
+    /**
+     * Get the id of the student.
+     * @return
+     */
+    public long getId() {
+        return id;
     }
 
-    public ImageView getImageView() {
-        return imageView;
+    /**
+     * Set the id of the student.
+     * @param id
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setLabel(String labelText) {
-        label.setText(labelText);
+    /**
+     * Get the first name of the student.
+     * @return
+     */
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setImageView(ImageView imageView) {
-        this.imageView = imageView;
+    /**
+     * Set the student's first name.
+     * @param firstName
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public Student(String name){
-        this.name.set(name);
+    /**
+     * Get the student's last name.
+     * @return
+     */
+    public String getLastName() {
+        return lastName;
     }
 
-    public Student(int studentId, String name){
-        this.studentId.set(studentId);
-        this.name.set(name);
-
+    /**
+     * Set the student's last name.
+     * @param lastName
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public Student(int studentId, String name, String pictureUrl){
-        this.studentId.set(studentId);
-        this.name.set(name);
-        this.pictureUrl.set(pictureUrl);
+    /**
+     * Get the file path of the student's picture.
+     * @return
+     */
+    public String getPicture() {
+        return picture;
     }
 
-    public int getStudentId() {
-        return studentId.get();
+    /**
+     * Set the student's picture file path.
+     * @param picture
+     */
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
-    public IntegerProperty studentIdProperty() {
-        return studentId;
+    /**
+     * Get the student's most absent day.
+     * @return
+     */
+    public Absence getMostAbsenceDay() {
+        return mostAbsenceDay;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId.set(studentId);
+    /**
+     * Set the student's most absent day.
+     * @param mostAbsenceDay
+     */
+    public void setMostAbsenceDay(Absence mostAbsenceDay) {
+        this.mostAbsenceDay = mostAbsenceDay;
     }
 
-    public String getName() {
-        return name.get();
+    /**
+     * Get the student's total absence.
+     * @return
+     */
+    public Absence getTotalAbsence() {
+        return totalAbsence;
     }
 
-    public StringProperty nameProperty() {
-        return name;
+    /**
+     * Set the student's total absence.
+     * @param totalAbsence
+     */
+    public void setTotalAbsence(Absence totalAbsence) {
+        this.totalAbsence = totalAbsence;
     }
 
-    public void setName(String name) {
-        this.name.set(name);
-    }
-
-    public String getPictureUrl() {
-        return pictureUrl.get();
-    }
-
-    public StringProperty pictureUrlProperty() {
-        return pictureUrl;
-    }
-
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl.set(pictureUrl);
-    }
-
-    public BorderPane makePersonPane() {
-        imageView.setImage(new Image(pictureUrl.getValue()));
-        imageView.setPreserveRatio(PRESERVE_RATIO);
-        imageView.setFitHeight(height.get());
-        imageView.setFitWidth(width.get());
-
-        this.personPane.setCenter(imageView);
-        label.setText(name.getValue());
-        BorderPane.setAlignment(label,Pos.CENTER);
-        label.setFont(personPaneFont);
-        this.personPane.setTop(label);
-        this.personPane.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 10;");
-
-        return personPane;
-    }
-
-    public void updatePersonPane() {
-        imageView.setImage(new Image(pictureUrl.getValue()));
-        imageView.setPreserveRatio(PRESERVE_RATIO);
-        imageView.setFitHeight(height.get());
-        imageView.setFitWidth(width.get());
-        this.personPane.setCenter(imageView);
-
-        label.setText(name.getValue());
-        label.setFont(personPaneFont);
-        this.personPane.setTop(label);
-        this.personPane.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 10;");
-    }
-
-    public BorderPane getPersonPane(){
-        return  personPane;
-    }
-
-    public void setPersonPane(BorderPane personPane) {
-        this.personPane = personPane;
-    }
 }
