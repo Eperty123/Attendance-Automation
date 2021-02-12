@@ -1,9 +1,11 @@
 package BLL;
 
 import BE.Student;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 
 import java.io.File;
@@ -24,6 +26,10 @@ public class GUIHelper {
             Text studentName = new Text(String.format("%s %s", student.getFirstName(), student.getLastName()));
             ImageView picture = new ImageView(new File(student.getPicture()).toURI().toString());
 
+            // Set the picture's width and height.
+            picture.setFitWidth(100);
+            picture.setFitHeight(100);
+
             // Adjust to fit the BorderPane.
             BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
             BorderPane.setAlignment(picture, Pos.CENTER);
@@ -31,6 +37,13 @@ public class GUIHelper {
             // Add the elements (nodes) to the BorderPane.
             pane.setTop(studentName);
             pane.setCenter(picture);
+
+            // Add some styling.
+            pane.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 10;");
+            pane.setPadding(new Insets(8, 8, 8, 8));
+
+            // We must use FlowPane's setMargin since we'll be adding it to a FlowPane.
+            FlowPane.setMargin(pane, new Insets(10, 10, 10, 10));
 
             // Return the created BorderPane.
             return pane;
