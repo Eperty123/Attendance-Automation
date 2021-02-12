@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 /**
  * Author: Carlo De Leon
- * Version: 1.1
+ * Version: 1.0
  */
 public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectionProvider {
 
@@ -22,7 +22,7 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Connect to the database.
+     * Tries to connect to the database
      */
     @Override
     public void connect() {
@@ -36,9 +36,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
 
 
     /**
-     * Get the current connection.
-     *
-     * @return The current connection.
+     * Gets the connection
+     * @return the connection
      */
     @Override
     public Connection getConnection() {
@@ -46,9 +45,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Get the databse name.
-     *
-     * @return The database name.
+     * Gets the databse
+     * @return the database
      */
     @Override
     public String getDatabase() {
@@ -56,9 +54,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Get the host.
-     *
-     * @return The host.
+     * Gets the host
+     * @return the host
      */
     @Override
     public String getHost() {
@@ -66,9 +63,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Get the database's user.
-     *
-     * @return The database's user.
+     * Gets the user
+     * @return the user
      */
     @Override
     public String getUser() {
@@ -76,9 +72,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Get the database user password.
-     *
-     * @return The database user's password.
+     * Gets the password
+     * @return the password
      */
     @Override
     public String getPassword() {
@@ -86,9 +81,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Get the port of the database.
-     *
-     * @return The port.
+     * Gets the port
+     * @return the port
      */
     @Override
     public int getPort() {
@@ -96,9 +90,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Set the database name.
-     *
-     * @param database The database name to connect to.
+     * Sets the database
+     * @param database the new database
      */
     @Override
     public void setDatabase(String database) {
@@ -107,9 +100,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Set the host for the database.
-     *
-     * @param host The host for the database.
+     * Sets the host
+     * @param host the new host
      */
     @Override
     public void setHost(String host) {
@@ -118,9 +110,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Set the database user.
-     *
-     * @param user The database user.
+     * Sets the user
+     * @param user the new user
      */
     @Override
     public void setUser(String user) {
@@ -129,9 +120,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Set the database user's password.
-     *
-     * @param password The database user's password.
+     * Sets the password
+     * @param password the new password
      */
     @Override
     public void setPassword(String password) {
@@ -140,9 +130,8 @@ public class DbMysqlConnectionProvider implements DAL.DB.IINTERFACE.IDbConnectio
     }
 
     /**
-     * Set the database port.
-     *
-     * @param port The database port.
+     * Sets the port
+     * @param port the new port
      */
     @Override
     public void setPort(int port) {
