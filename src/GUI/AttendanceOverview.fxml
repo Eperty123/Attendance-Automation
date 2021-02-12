@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,7 +15,7 @@
          <center>
             <ScrollPane fitToHeight="true" fitToWidth="true">
                <content>
-                  <FlowPane>
+                  <FlowPane fx:id="studentListFlowPane">
                      <children>
                         <BorderPane prefHeight="246.0" prefWidth="200.0" style="-fx-background-color: lightgrey; -fx-background-radius: 10;">
                            <top>
