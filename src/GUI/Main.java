@@ -1,5 +1,6 @@
 package GUI;
 
+import GUI.CONTROLLER.AttendanceOverviewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,16 +10,17 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     private Stage primaryStage;
-    private ViewController viewController;
+
+    private AttendanceOverviewController viewController;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("View.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AttendanceOverview.fxml"));
         Parent root = loader.load();
         this.viewController=loader.getController();
-        viewController.setMain(this);
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        //primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Attendance Overview");
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
