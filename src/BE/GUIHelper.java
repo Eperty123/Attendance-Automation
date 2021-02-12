@@ -40,6 +40,7 @@ public class GUIHelper {
             pane.setCenter(picture);
 
             // Adding styling.
+            pane.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 10px;");
             pane.setPadding(new Insets(8, 8, 8, 8));
             FlowPane.setMargin(pane, new Insets(10, 10, 10, 10));
 
