@@ -1,13 +1,17 @@
 package GUI.CONTROLLER;
 
 import BE.Student;
-import BLL.GUIHelper;
+import BE.GUIHelper;
 import javafx.fxml.FXML;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
 public class AttendanceOverviewController {
+    public static final int WIDTH = 150;
+    public static final int HEIGHT = 250;
+    public static final Font FONT = new Font("System Bold", 24);
     @FXML
     public FlowPane studentListFlowPane;
 
@@ -22,7 +26,7 @@ public class AttendanceOverviewController {
             student.setFirstName(firstName);
             student.setLastName(lastName);
             student.setPicture("Data/Pictures/shawn mendes.png");
-            var studentPane = GUIHelper.createStudentBorderPane(student);
+            var studentPane = GUIHelper.createStudentBorderPane(student, FONT, WIDTH, HEIGHT);
             studentListFlowPane.getChildren().add(studentPane);
         }
     }
