@@ -6,10 +6,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 
+import java.io.File;
+
 public class GUIHelper {
 
     /**
      * Create a BorderPane scene element for the given Student.
+     *
      * @param student The student to create a BorderPane for.
      * @return Returns the created BorderPane. Null if the student is null.
      */
@@ -19,7 +22,7 @@ public class GUIHelper {
 
             // Get the student's first and last name as well as picture path.
             Text studentName = new Text(String.format("%s %s", student.getFirstName(), student.getLastName()));
-            ImageView picture = new ImageView(student.getPicture());
+            ImageView picture = new ImageView(new File(student.getPicture()).toURI().toString());
 
             // Adjust to fit the BorderPane.
             BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
