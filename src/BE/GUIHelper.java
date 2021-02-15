@@ -21,7 +21,7 @@ public class GUIHelper {
      * @param height  The height for the student's picture.
      * @return Returns the created BorderPane. Null if the student is null.
      */
-    public static BorderPane createStudentBorderPane(Student student, Font font, double width, double height) {
+    public static BorderPane createStudentBorderPane(Student student, Font font, double width, double height, String style) {
         if (student != null) {
             var pane = new BorderPane();
 
@@ -42,9 +42,12 @@ public class GUIHelper {
             pane.setCenter(picture);
 
             // Adding styling.
-            pane.setStyle("-fx-background-color: lightgrey; -fx-background-radius: 10px;");
+            pane.setStyle(style);
             pane.setPadding(new Insets(8, 8, 8, 8));
             FlowPane.setMargin(pane, new Insets(10, 10, 10, 10));
+
+            // Assign an id.
+            pane.setAccessibleText(String.format("%d", student.getId()));
 
             // Return the created BorderPane.
             return pane;

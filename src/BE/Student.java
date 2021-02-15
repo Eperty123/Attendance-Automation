@@ -1,5 +1,7 @@
 package BE;
 
+import javafx.scene.layout.BorderPane;
+
 /**
  * The class responsible for defining Students.
  * Use GUIHelper to create GUI stuff from the Student class.
@@ -12,6 +14,7 @@ public class Student {
 
     protected Absence mostAbsenceDay;
     protected Absence totalAbsence;
+    protected BorderPane studentPane;
 
     /**
      * Get the id of the student.
@@ -109,4 +112,19 @@ public class Student {
         this.totalAbsence = totalAbsence;
     }
 
+    /**
+     * Get the student's assigned BorderPane.
+     * @return
+     */
+    public BorderPane getStudentPane() {
+        return studentPane;
+    }
+
+    /**
+     * Set the student's BorderPane.
+     * @param studentPane
+     */
+    public void setStudentPane(BorderPane studentPane) {
+        this.studentPane = studentPane;
+    }
 }
