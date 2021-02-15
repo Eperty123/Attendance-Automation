@@ -1,20 +1,36 @@
 package BE;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The class responsible for defining Students.
  * Use GUIHelper to create GUI stuff from the Student class.
  */
 public class Student {
     protected long id;
-    protected String firstName;
-    protected String lastName;
+    protected String firstName = "";
+    protected String lastName = "";
     protected String picture;
-
+    protected List<LocalDateTime> daysAttended = new ArrayList<>();
     protected Absence mostAbsenceDay;
     protected Absence totalAbsence;
 
+    public Student(){}
+
+    public Student(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public Student(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     /**
      * Get the id of the student.
+     *
      * @return
      */
     public long getId() {
@@ -23,14 +39,20 @@ public class Student {
 
     /**
      * Set the id of the student.
+     *
      * @param id
      */
     public void setId(long id) {
         this.id = id;
     }
 
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+
     /**
      * Get the first name of the student.
+     *
      * @return
      */
     public String getFirstName() {
@@ -39,6 +61,7 @@ public class Student {
 
     /**
      * Set the student's first name.
+     *
      * @param firstName
      */
     public void setFirstName(String firstName) {
@@ -47,6 +70,7 @@ public class Student {
 
     /**
      * Get the student's last name.
+     *
      * @return
      */
     public String getLastName() {
@@ -55,6 +79,7 @@ public class Student {
 
     /**
      * Set the student's last name.
+     *
      * @param lastName
      */
     public void setLastName(String lastName) {
@@ -63,6 +88,7 @@ public class Student {
 
     /**
      * Get the file path of the student's picture.
+     *
      * @return
      */
     public String getPicture() {
@@ -71,6 +97,7 @@ public class Student {
 
     /**
      * Set the student's picture file path.
+     *
      * @param picture
      */
     public void setPicture(String picture) {
@@ -79,6 +106,7 @@ public class Student {
 
     /**
      * Get the student's most absent day.
+     *
      * @return
      */
     public Absence getMostAbsenceDay() {
@@ -87,6 +115,7 @@ public class Student {
 
     /**
      * Set the student's most absent day.
+     *
      * @param mostAbsenceDay
      */
     public void setMostAbsenceDay(Absence mostAbsenceDay) {
@@ -95,6 +124,7 @@ public class Student {
 
     /**
      * Get the student's total absence.
+     *
      * @return
      */
     public Absence getTotalAbsence() {
@@ -103,10 +133,44 @@ public class Student {
 
     /**
      * Set the student's total absence.
+     *
      * @param totalAbsence
      */
     public void setTotalAbsence(Absence totalAbsence) {
         this.totalAbsence = totalAbsence;
     }
 
+    /**
+     * Gets the days attended
+     *
+     * @return the days attended
+     */
+    public List<LocalDateTime> getDaysAttended() {
+        return daysAttended;
+    }
+
+    /**
+     * Attends current date
+     */
+    public void attend() {
+        daysAttended.add(LocalDateTime.now());
+    }
+
+    /**
+     * Attends a specific date
+     *
+     * @param localDateTime the date you want to add
+     */
+    public void attend(LocalDateTime localDateTime) {
+        daysAttended.add(localDateTime);
+    }
+
+    public int[] getWeekDaysAttended() {
+        int[] dayFreq = new int[5];
+        this.getDaysAttended().forEach(d -> {
+            if (d.getDayOfWeek().getValue() < 6)
+                dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
+        });
+        return dayFreq;
+    }
 }

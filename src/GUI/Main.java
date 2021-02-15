@@ -1,5 +1,6 @@
 package GUI;
 
+import BE.Student;
 import GUI.CONTROLLER.AttendanceOverviewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +21,7 @@ public class Main extends Application {
         viewController.createStudents();
         //primaryStage.setTitle("Hello World");
         primaryStage.setTitle("Attendance Overview");
+        Student student = new Student("Dennis");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
