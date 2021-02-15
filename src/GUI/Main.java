@@ -57,7 +57,7 @@ public class Main extends Application {
      * @return Returns the replaced stage.
      * @throws Exception Any exceptions.
      */
-    public Parent replaceStage(String fxml) throws Exception {
+    public Parent replaceStage(String fxml, String title) throws Exception {
         Parent page = FXMLLoader.load(getClass().getResource(fxml), null, new JavaFXBuilderFactory());
         if (getActiveStage() != null) {
             Scene scene = getActiveStage().getScene();
@@ -67,6 +67,7 @@ public class Main extends Application {
             } else {
                 getActiveStage().getScene().setRoot(page);
             }
+            getActiveStage().setTitle(title);
             getActiveStage().sizeToScene();
         }
         return page;

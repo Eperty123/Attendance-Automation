@@ -35,8 +35,8 @@ public class AttendanceOverviewController implements Initializable {
         if (!configurationManager.hasStudents())
             configurationManager.setStudentList(createStudents(3));
 
-        System.out.println(String.format("Students count: %d", configurationManager.getStudentList().size()));
         selectStudent();
+        System.out.println(String.format("Students count: %d", configurationManager.getStudentList().size()));
     }
 
     public List<Student> createStudents(int amount) {
@@ -93,8 +93,11 @@ public class AttendanceOverviewController implements Initializable {
                                         }
                                     });
 
-                                    System.out.println(String.format("Selected student id: %s", configurationManager.getSelectedStudent().getId()));
-                                    Main.getInstance().replaceStage("StudentDashboard.fxml");
+                                    if (configurationManager.getSelectedStudent() != null) {
+                                        System.out.println(String.format("Selected student id: %s", configurationManager.getSelectedStudent().getId()));
+                                        Main.getInstance().replaceStage("StudentDashboard.fxml", "Student Dashboard");
+                                    }
+
                                 } catch (Exception exception) {
                                     exception.printStackTrace();
                                 }
