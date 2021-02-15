@@ -4,8 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,7 +27,7 @@ public class PieChartUtils {
                 if(d.getDayOfWeek().getValue()<6)
                     i.incrementAndGet();
             });
-            pieChartData.add(new PieChart.Data(student.getName(), i.get()));
+            pieChartData.add(new PieChart.Data(student.getFullName(), i.get()));
         }
 
         PieChart pieChart = new PieChart(pieChartData);
@@ -51,7 +49,7 @@ public class PieChartUtils {
                 pieChartData.add(new PieChart.Data(days.get(i), dayFreq[i]));
         }
         PieChart pieChart = new PieChart(pieChartData);
-        pieChart.setTitle("Pie chart of " + student.getName() + "'s Attendance");
+        pieChart.setTitle("Pie chart of " + student.getFullName() + "'s Attendance");
         return pieChart;
     }
 

@@ -50,8 +50,8 @@ public class Student {
         this.id = id;
     }
 
-    public String getName() {
-        return firstName + " " + lastName;
+    public String getFullName() {
+        return String.format("%s %s", getFirstName(), getLastName());
     }
 
     /**
@@ -165,7 +165,7 @@ public class Student {
     /**
      * Gets the days attended.
      *
-     * @return the days attended
+     * @return the days attended.
      */
     public List<LocalDateTime> getDaysAttended() {
         return daysAttended;
@@ -179,7 +179,7 @@ public class Student {
     }
 
     /**
-     * Attends a specific date
+     * Attends a specific date.
      *
      * @param localDateTime the date you want to add
      */
@@ -187,6 +187,11 @@ public class Student {
         daysAttended.add(localDateTime);
     }
 
+    /**
+     * Get the student's weeks attended.
+     *
+     * @return
+     */
     public int[] getWeekDaysAttended() {
         int[] dayFreq = new int[5];
         this.getDaysAttended().forEach(d -> {

@@ -34,7 +34,7 @@ public class BarChartUtils {
 
         for(Student student : students) {
             XYChart.Series<String, Number> series = new XYChart.Series<>();
-            series.setName(student.getName());
+            series.setName(student.getFullName());
             List<LocalDateTime> attendedDates = new ArrayList<>(student.getDaysAttended());
             int[] dayFreq = student.getWeekDaysAttended();
             for (int i = 0; i <= 4; i++) {
@@ -57,10 +57,10 @@ public class BarChartUtils {
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Attendance");
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setTitle(student.getName() + "'s Attendance");
+        barChart.setTitle(student.getFullName() + "'s Attendance");
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName(student.getName());
+        series.setName(student.getFullName());
         int[] dayFreq = student.getWeekDaysAttended();
         for (int i = 0; i <= 4; i++) {
             series.getData().add(new XYChart.Data<>(days.get(i), dayFreq[i]));
@@ -90,7 +90,7 @@ public class BarChartUtils {
                 if (d.getDayOfWeek().getValue() < 6)
                     i.getAndIncrement();
             });
-            series1.getData().add(new XYChart.Data<>(p.getName(), i));
+            series1.getData().add(new XYChart.Data<>(p.getFullName(), i));
         });
         barChart.getData().add(series1);
         return barChart;

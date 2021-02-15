@@ -2,7 +2,7 @@ package GUI.CONTROLLER;
 
 import BE.GUIHelper;
 import BE.Student;
-import BLL.ConfigurationManager;
+import BLL.SessionManager;
 import GUI.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,20 +23,21 @@ public class AttendanceOverviewController implements Initializable {
     public static final String DEFAULT_STYLE = "-fx-background-color: lightgrey; -fx-background-radius: 10px";
     public static final String SELECTED_STYLE = "-fx-background-radius: 15;-fx-background-color: lightblue;-fx-border-style: solid;-fx-border-color: grey;-fx-border-radius: 15;";
 
-    protected ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+    protected SessionManager sessionManager = SessionManager.getInstance();
 
     @FXML
     public FlowPane studentListFlowPane;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        configurationManager = new ConfigurationManager();
+        sessionManager = new SessionManager();
+        sessionManager.setMainController(Main.getInstance());
 
-        if (!configurationManager.hasStudents())
-            configurationManager.setStudentList(createStudents(3));
+        if (!sessionManager.hasStudents())
+            sessionManager.setStudentList(createStudents(3));
 
         selectStudent();
-        System.out.println(String.format("Students count: %d", configurationManager.getStudentList().size()));
+        System.out.println(String.format("Students count: %d", sessionManager.getStudentList().size()));
     }
 
     public List<Student> createStudents(int amount) {
@@ -48,9 +49,24 @@ public class AttendanceOverviewController implements Initializable {
             var student = new Student();
 
             student.setId(i);
-            student.setFirstName(firstName);
-            student.setLastName(lastName);
-            student.setPicture("Data/Pictures/shawn mendes.png");
+
+            switch (i) {
+                case 0:
+                    student.setFirstName("Shawn");
+                    student.setLastName("Mendes");
+                    student.setPicture("Data/Pictures/shawn mendes.png");
+                    break;
+                case 1:
+                    student.setFirstName("Justin");
+                    student.setLastName("Bieber");
+                    student.setPicture("Data/Pictures/justin bieber.png");
+                    break;
+                case 2:
+                    student.setFirstName("Adam");
+                    student.setLastName("Lavine");
+                    student.setPicture("Data/Pictures/adam lavine.png");
+                    break;
+            }
 
             student.setStudentPane(addToStudentListFlowPane(student));
             studentList.add(student);
@@ -84,18 +100,21 @@ public class AttendanceOverviewController implements Initializable {
                             if (e.getButton() == MouseButton.PRIMARY) {
                                 try {
                                     // Assign the configuration's selected student to the selected one though the node.
-                                    configurationManager.getStudentList().forEach((student) -> {
+                                    sessionManager.getStudentList().forEach((student) -> {
 
                                         // When the student id matches the accessible text (id), assign.
                                         if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText())) {
-                                            configurationManager.setSelectedStudent(student);
+                                            sessionManager.setSelectedStudent(student);
                                             //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                                         }
                                     });
 
-                                    if (configurationManager.getSelectedStudent() != null) {
-                                        System.out.println(String.format("Selected student id: %s", configurationManager.getSelectedStudent().getId()));
-                                        Main.getInstance().replaceStage("StudentDashboard.fxml", "Student Dashboard");
+                                    if (sessionManager.getSelectedStudent() != null) {
+                                        System.out.println(String.format("Selected student id: %s", sessionManager.getSelectedStudent().getId()));
+                                        var dashboardController = (StudentDashboardController) Main.getInstance().changeStage("FXML/StudentDashboard.fxml", "Student Dashboard");
+                                        dashboardController.setSessionManager(sessionManager);
+                                        dashboardController.updateDashboard();
+
                                     }
 
                                 } catch (Exception exception) {

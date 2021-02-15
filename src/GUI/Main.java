@@ -1,10 +1,7 @@
 package GUI;
 
-import BE.Student;
-import GUI.CONTROLLER.AttendanceOverviewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -26,7 +23,7 @@ public class Main extends Application {
         instance = this;
         activeStage = primaryStage;
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AttendanceOverview.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/AttendanceOverview.fxml"));
         Parent root = loader.load();
         //viewController = loader.getController();
 
@@ -51,14 +48,15 @@ public class Main extends Application {
     }
 
     /**
-     * Replace the current stage with the specified fxml path.
+     * Change the current stage to the specified fxml.
      *
      * @param fxml The fxml name of the replacement stage.
-     * @return Returns the replaced stage.
+     * @return Returns the stage's controller.
      * @throws Exception Any exceptions.
      */
-    public Parent replaceStage(String fxml, String title) throws Exception {
-        Parent page = FXMLLoader.load(getClass().getResource(fxml), null, new JavaFXBuilderFactory());
+    public <T> T changeStage(String fxml, String title) throws Exception {
+        var loader = new FXMLLoader(getClass().getResource(fxml));
+        Parent page = loader.load();
         if (getActiveStage() != null) {
             Scene scene = getActiveStage().getScene();
             if (scene == null) {
@@ -68,8 +66,25 @@ public class Main extends Application {
                 getActiveStage().getScene().setRoot(page);
             }
             getActiveStage().setTitle(title);
-            getActiveStage().sizeToScene();
+            getActiveStage().centerOnScreen();
         }
-        return page;
+        return loader.getController();
+    }
+
+    /**
+     * Change and open the current stage to the specified fxml in a new window.
+     *
+     * @param fxml The fxml name of the replacement stage.
+     * @return Returns the stage's controller.
+     * @throws Exception Any exceptions.
+     */
+    public <T> T changeStageInNewWindow(String fxml, String title) throws Exception {
+        var loader = new FXMLLoader(getClass().getResource(fxml));
+        Parent root = loader.load();
+        var stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle(title);
+        stage.showAndWait();
+        return loader.getController();
     }
 }
