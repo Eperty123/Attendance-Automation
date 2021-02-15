@@ -1,5 +1,7 @@
 package GUI;
 
+import BE.Student;
+import GUI.CONTROLLER.AttendanceOverviewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
