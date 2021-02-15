@@ -1,6 +1,7 @@
 package BE;
 
 import javafx.scene.layout.BorderPane;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,8 @@ public class Student {
     protected Absence totalAbsence;
     protected BorderPane studentPane;
 
-    public Student(){}
+    public Student() {
+    }
 
     public Student(String firstName) {
         this.firstName = firstName;
@@ -144,6 +146,7 @@ public class Student {
 
     /**
      * Get the student's assigned BorderPane.
+     *
      * @return
      */
     public BorderPane getStudentPane() {
@@ -152,13 +155,15 @@ public class Student {
 
     /**
      * Set the student's BorderPane.
+     *
      * @param studentPane
      */
     public void setStudentPane(BorderPane studentPane) {
         this.studentPane = studentPane;
-	}
-	
-     * Gets the days attended
+    }
+
+    /**
+     * Gets the days attended.
      *
      * @return the days attended
      */
