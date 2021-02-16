@@ -1,7 +1,7 @@
 package GUI.CONTROLLER;
 
 import BE.Student;
-import BLL.SessionManager;
+import BE.INTERFACE.ISessionManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,7 +20,15 @@ public class StudentDashboardController implements Initializable {
     @FXML
     public Text welcomeLbl;
 
-    protected SessionManager sessionManager;
+    /**
+     * The ISessionManager for handling session data.
+     */
+    protected ISessionManager sessionManager;
+
+    /**
+     * The AbsenceOverViewController.
+     */
+    protected AbsenceOverviewController absenceOverviewController;
 
 
     @Override
@@ -28,14 +36,18 @@ public class StudentDashboardController implements Initializable {
         updateDashboard();
     }
 
-    public SessionManager getSessionManager() {
+    public ISessionManager getSessionManager() {
         return sessionManager;
     }
 
-    public void setSessionManager(SessionManager sessionManager) {
+    public void setSessionManager(ISessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
+
+    /**
+     * Update the student dashboard ui.
+     */
     public void updateDashboard() {
         if (sessionManager != null) {
             if (sessionManager.hasStudents()) {
@@ -46,6 +58,10 @@ public class StudentDashboardController implements Initializable {
 
     }
 
+    /**
+     * The event handler for going back to the student overview.
+     * @throws Exception
+     */
     public void backToAttendanceOverview() throws Exception {
         try {
             getSessionManager().getMainController().changeStage("FXML/AttendanceOverview.fxml", "Attendance Overview");
@@ -54,18 +70,24 @@ public class StudentDashboardController implements Initializable {
         }
     }
 
+    /**
+     * The event handler for showing attendance stats.
+     */
     public void showAttendanceStats() {
         try {
-            var absenceController = (AbsenceOverviewController)getSessionManager().getMainController().changeStageInNewWindow("FXML/AbsenceOverview.fxml", "My Attendance Stats");
-            absenceController.setSessionManager(getSessionManager());
-            absenceController.update();
-        }
-        catch (Exception e) {
+            absenceOverviewController = getSessionManager().getMainController().changeStageInNewWindow("FXML/AbsenceOverview.fxml", "My Attendance Stats");
+            absenceOverviewController.setSessionManager(getSessionManager());
+            absenceOverviewController.updateChart();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
+    /**
+     * Get the selected student.
+     * @return
+     */
     public Student getSelectedStudent() {
         return getSessionManager().getSelectedStudent();
     }

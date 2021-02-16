@@ -1,12 +1,11 @@
-package BLL;
+package BE;
 
-import BE.Session;
-import BE.Student;
+import BE.INTERFACE.ISessionManager;
 import GUI.Main;
 
 import java.util.List;
 
-public class SessionManager {
+public class SessionManager implements ISessionManager {
     protected Session session;
     protected Main mainController;
 
@@ -20,6 +19,7 @@ public class SessionManager {
         initialize();
     }
 
+    @Override
     /**
      * Get the assigned main controller instance.
      * @return The current main controller instance.
@@ -28,6 +28,7 @@ public class SessionManager {
         return mainController;
     }
 
+    @Override
     /**
      * Set the main controller instance.
      * @param mainController The main controller to use.
@@ -36,6 +37,7 @@ public class SessionManager {
         this.mainController = mainController;
     }
 
+    @Override
     /**
      * Does a student exist in the configuration?
      * @return
@@ -44,6 +46,7 @@ public class SessionManager {
         return session.hasStudents();
     }
 
+    @Override
     /**
      * Get the Session instance.
      * @return
@@ -52,6 +55,7 @@ public class SessionManager {
         return session;
     }
 
+    @Override
     /**
      * Get the current Session's students.
      * @return
@@ -60,6 +64,7 @@ public class SessionManager {
         return session.getStudentList();
     }
 
+    @Override
     /**
      * Set the Session's student list array.
      * @param studentList
@@ -68,6 +73,7 @@ public class SessionManager {
         session.setStudentList(studentList);
     }
 
+    @Override
     /**
      * Get the selected student from the student overview.
      * @return The selected student.
@@ -76,6 +82,7 @@ public class SessionManager {
         return session.getSelectedStudent();
     }
 
+    @Override
     /**
      * Set the selected student.
      * @param student The selected student to use.
@@ -93,5 +100,15 @@ public class SessionManager {
     public static SessionManager getInstance() {
         if (instance == null) instance = new SessionManager();
         return instance;
+    }
+
+    @Override
+    public ISessionManager getSessionManager() {
+        return this;
+    }
+
+    @Override
+    public void setSessionManager(ISessionManager sessionManager) {
+
     }
 }

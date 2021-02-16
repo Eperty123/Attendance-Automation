@@ -1,9 +1,12 @@
 package GUI.CONTROLLER;
 
-import BLL.SessionManager;
+import BE.GUIHelper;
+import BE.PieChartUtils;
+import BE.INTERFACE.ISessionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Font;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,22 +16,38 @@ public class AbsenceOverviewController implements Initializable {
     @FXML
     public FlowPane absenceFlowPane;
 
-    protected SessionManager sessionManager;
+    protected ISessionManager sessionManager;
+
+    public static final Font FONT = new Font("System Bold", 24);
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 
-    public SessionManager getSessionManager() {
+    /**
+     * Get the ISessionManager instance.
+     * @return
+     */
+    public ISessionManager getSessionManager() {
         return sessionManager;
     }
 
-    public void setSessionManager(SessionManager sessionManager) {
+    /**
+     * Set the ISessionManager.
+     * @param sessionManager
+     */
+    public void setSessionManager(ISessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 
-    public void update() {
-        // TODO: Implement charts.
+    /**
+     * Update the chart.
+     */
+    public void updateChart() {
+
+        var chartInfo = PieChartUtils.getStudentPieChart(sessionManager.getSelectedStudent(), String.format("%s's Attendance", getSessionManager().getSelectedStudent().getFullName()));
+        var chartPane = GUIHelper.createPieChartBorderPane(chartInfo, FONT);
+        absenceFlowPane.getChildren().add(chartPane);
     }
 }

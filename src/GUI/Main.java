@@ -1,15 +1,21 @@
 package GUI;
 
+import BE.INTERFACE.ISessionManager;
+import BE.SessionManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     private Stage activeStage;
+    private Stage primaryStage;
     private static Main instance;
+
+    public ISessionManager sessionManager = SessionManager.getInstance();
 
     public static Main getInstance() {
         if (instance == null)
@@ -21,6 +27,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         instance = this;
+        this.primaryStage = primaryStage;
         activeStage = primaryStage;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/AttendanceOverview.fxml"));
@@ -81,10 +88,16 @@ public class Main extends Application {
     public <T> T changeStageInNewWindow(String fxml, String title) throws Exception {
         var loader = new FXMLLoader(getClass().getResource(fxml));
         Parent root = loader.load();
+
         var stage = new Stage();
         stage.setScene(new Scene(root));
         stage.setTitle(title);
-        stage.showAndWait();
+
+        // Make the new stage wait for closure before being able to return to the main window.
+        // Reference: https://www.codota.com/code/java/methods/javafx.stage.Stage/showAndWait.
+        stage.initOwner(primaryStage);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
         return loader.getController();
     }
 }
