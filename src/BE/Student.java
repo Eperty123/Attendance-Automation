@@ -2,9 +2,12 @@ package BE;
 
 import javafx.scene.layout.BorderPane;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The class responsible for defining Students.
@@ -19,6 +22,8 @@ public class Student {
     protected Absence mostAbsenceDay;
     protected Absence totalAbsence;
     protected BorderPane studentPane;
+    protected static Set<LocalDate> dateSet = new HashSet<LocalDate>();
+    protected Set<LocalDate> studentDateSet = new HashSet<LocalDate>();
 
     public Student() {
     }
@@ -30,6 +35,12 @@ public class Student {
     public Student(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public Student(String firstName, String lastName, String pictureUrl) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        setPicture(pictureUrl);
     }
 
     /**
@@ -144,6 +155,10 @@ public class Student {
         this.totalAbsence = totalAbsence;
     }
 
+    public Set<LocalDate> getDaysWithAtleastOneAttend(){
+        return dateSet;
+    }
+
     /**
      * Get the student's assigned BorderPane.
      *
@@ -176,6 +191,8 @@ public class Student {
      */
     public void attend() {
         daysAttended.add(LocalDateTime.now());
+        studentDateSet.add(LocalDate.now());
+        dateSet.add(LocalDate.now());
     }
 
     /**
@@ -185,6 +202,8 @@ public class Student {
      */
     public void attend(LocalDateTime localDateTime) {
         daysAttended.add(localDateTime);
+        studentDateSet.add(localDateTime.toLocalDate());
+        dateSet.add(localDateTime.toLocalDate());
     }
 
     /**
@@ -194,7 +213,7 @@ public class Student {
      */
     public int[] getWeekDaysAttended() {
         int[] dayFreq = new int[5];
-        this.getDaysAttended().forEach(d -> {
+        this.studentDateSet.forEach(d -> {
             if (d.getDayOfWeek().getValue() < 6)
                 dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
         });

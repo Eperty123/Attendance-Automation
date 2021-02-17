@@ -14,10 +14,7 @@ import javafx.scene.text.Font;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AttendanceOverviewController implements Initializable {
 
@@ -47,6 +44,11 @@ public class AttendanceOverviewController implements Initializable {
     public static final String SELECTED_STYLE = "-fx-background-radius: 15;-fx-background-color: lightblue;-fx-border-style: solid;-fx-border-color: grey;-fx-border-radius: 15;";
 
     /**
+     * Makes a new Random instance
+     * (using seed 1337 for testing)
+     */
+    Random random = new Random(1337);
+    /**
      * The ISessionManager for handling session data.
      */
     protected ISessionManager sessionManager;
@@ -69,7 +71,7 @@ public class AttendanceOverviewController implements Initializable {
         } else sessionManager = SessionManager.getInstance();
 
         if (!sessionManager.hasStudents())
-            sessionManager.setStudentList(createStudents(3));
+            sessionManager.setStudentList(createStudents());
 
         selectStudent();
         System.out.println(String.format("Students count: %d", sessionManager.getStudentList().size()));
@@ -78,50 +80,19 @@ public class AttendanceOverviewController implements Initializable {
     /**
      * Create students mock data.
      *
-     * @param amount The amount of students to create.
      * @return The created students.
      */
-    public List<Student> createStudents(int amount) {
-        var studentList = new ArrayList<Student>();
+    public List<Student> createStudents() {
+        var studentList = Arrays.asList(new Student("Shawn", "Mendes", "Data/Pictures/shawn mendes.png"),
+                new Student("Justin","Bieber","Data/Pictures/justin bieber.png"),
+                new Student("Adam","Lavine","Data/Pictures/adam lavine.png"));
 
-        for (int i = 0; i < amount; i++) {
-            var firstName = String.format("%s %d", "Test First Name", i);
-            var lastName = String.format("%s %d", "Test Last Name", i);
-            var student = new Student();
-
-            student.setId(i);
-
-            switch (i) {
-                case 0:
-                    student.setFirstName("Shawn");
-                    student.setLastName("Mendes");
-                    student.setPicture("Data/Pictures/shawn mendes.png");
-                    break;
-                case 1:
-                    student.setFirstName("Justin");
-                    student.setLastName("Bieber");
-                    student.setPicture("Data/Pictures/justin bieber.png");
-                    break;
-                case 2:
-                    student.setFirstName("Adam");
-                    student.setLastName("Lavine");
-                    student.setPicture("Data/Pictures/adam lavine.png");
-                    break;
-            }
-
-            // Add attendance mock data.
-
-            // Randomize attendance data.
-            for (int a = 0; a < 5; a++) {
-                Random random = new Random();
-                student.attend(LocalDateTime.now().minusDays(random.nextInt(7)));
-            }
-
-
-            student.setStudentPane(addToStudentListFlowPane(student));
-            studentList.add(student);
-        }
-
+        studentList.forEach(s->{
+            s.setId(studentList.indexOf(s)+1);
+            for(int i=0;i<100;i++)
+            s.attend(LocalDateTime.now().minusDays(random.nextInt(1000)));
+            s.setStudentPane(addToStudentListFlowPane(s));
+        });
         return studentList;
     }
 

@@ -79,7 +79,7 @@ public class GUIHelper {
                 totalPercentage += percentage.getPieValue();
             }
 
-            var totalAbsencePercentageText = new Text(String.format("Total absence: %s%%", totalPercentage));
+            var totalAbsencePercentageText = new Text(String.format("Total attendance: %s%%", totalPercentage));
             totalAbsencePercentageText.setFont(font);
             BorderPane.setAlignment(totalAbsencePercentageText, Pos.CENTER);
             pane.setBottom(totalAbsencePercentageText);
