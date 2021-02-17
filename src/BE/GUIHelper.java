@@ -1,5 +1,6 @@
 package BE;
 
+import GUI.CONTROLLER.AttendanceOverviewController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
@@ -29,7 +30,7 @@ public class GUIHelper {
             // Get the student's first and last name as well as picture path.
             Text studentName = new Text(String.format("%s \n%s", student.getFirstName(), student.getLastName()));
             studentName.setFont(font);
-            ImageView picture = new ImageView(new File(student.getPicture()).toURI().toString());
+            ImageView picture = new ImageView(student.getPicture());
             picture.setPreserveRatio(true);
             picture.setFitWidth(width);
             picture.setFitHeight(height);
@@ -54,6 +55,45 @@ public class GUIHelper {
             return pane;
         }
         return null;
+    }
+
+    /**
+     * Create a BorderPane scene element for the given Student.
+     *
+     * @param student The student to create a BorderPane for.
+     * @return Returns the created BorderPane. Null if the student is null.
+     */
+    public static void createStudentBorderPane(Student student) {
+        if (student != null) {
+            var pane = new BorderPane();
+
+            // Get the student's first and last name as well as picture path.
+            Text studentName = new Text(String.format("%s \n%s", student.getFirstName(), student.getLastName()));
+            studentName.setFont(AttendanceOverviewController.FONT);
+            ImageView picture = new ImageView(student.getPicture());
+            picture.setPreserveRatio(true);
+            picture.setFitWidth(AttendanceOverviewController.WIDTH);
+            picture.setFitHeight(AttendanceOverviewController.HEIGHT);
+
+            // Adjust to fit the BorderPane.
+            BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
+            BorderPane.setAlignment(picture, Pos.CENTER);
+
+            // Add the elements (nodes) to the BorderPane.
+            pane.setTop(studentName);
+            pane.setCenter(picture);
+
+            // Adding styling.
+            pane.setStyle(AttendanceOverviewController.DEFAULT_STYLE);
+            pane.setPadding(new Insets(8, 8, 8, 8));
+            FlowPane.setMargin(pane, new Insets(10, 10, 10, 10));
+
+            // Assign an id.
+            pane.setAccessibleText(String.format("%d", student.getId()));
+
+            // Return the created BorderPane.
+            student.studentPane=pane;
+        }
     }
 
     /**

@@ -5,19 +5,25 @@ import BE.Student;
 import BE.INTERFACE.ISessionManager;
 import BE.SessionManager;
 import GUI.Main;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
 
 public class AttendanceOverviewController implements Initializable {
 
@@ -47,9 +53,21 @@ public class AttendanceOverviewController implements Initializable {
     public static final String SELECTED_STYLE = "-fx-background-radius: 15;-fx-background-color: lightblue;-fx-border-style: solid;-fx-border-color: grey;-fx-border-radius: 15;";
 
     /**
+     * Makes a new Random instance
+     * (using seed 1337 for testing)
+     */
+    Random random = new Random(1337);
+    /**
      * The ISessionManager for handling session data.
      */
     protected ISessionManager sessionManager;
+
+    /**
+     * initializes the student list
+     */
+    protected ObservableList<Student> studentList = FXCollections.observableArrayList(Arrays.asList(new Student("Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
+            new Student("Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
+            new Student("Adam", "Lavine", "/GUI/Pictures/adamlavine.png")));
 
     @FXML
     public FlowPane studentListFlowPane;
@@ -57,6 +75,70 @@ public class AttendanceOverviewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeSessionManager();
+        CRUDListeners();
+    }
+
+    /**
+     * Listens after changes in the students and changes the view accordingly.
+     */
+    private void CRUDListeners() {
+        //Loops through students
+        studentList.forEach(s ->
+                //adds change listener
+                s.firstNameProperty().addListener((observable, t1, t2) -> {
+                    //Runs this code when the observable value changes
+                    int index = studentListFlowPane.getChildren().indexOf(s.getStudentPane());
+                    studentListFlowPane.getChildren().remove(s.getStudentPane());
+                    Text studentName = new Text(String.format("%s \n%s", t2, s.getLastName()));
+                    studentName.setFont(FONT);
+                    BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
+                    s.getStudentPane().setTop(studentName);
+                    studentListFlowPane.getChildren().add(index, s.getStudentPane());
+                }));
+
+        //Loops through students
+        studentList.forEach(s ->
+                //adds change listener
+                s.lastNameProperty().addListener((observable, t1, t2) -> {
+                    //Runs this code when the observable value changes
+                    int index = studentListFlowPane.getChildren().indexOf(s.getStudentPane());
+                    studentListFlowPane.getChildren().remove(s.getStudentPane());
+                    Text studentName = new Text(String.format("%s \n%s", s.getFirstName(), t2));
+                    studentName.setFont(FONT);
+                    BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
+                    s.getStudentPane().setTop(studentName);
+                    studentListFlowPane.getChildren().add(index, s.getStudentPane());
+                }));
+
+        //Loops through students
+        studentList.forEach(s ->
+                //adds change listener
+                s.pictureProperty().addListener((observable, t1, t2) -> {
+                    //Runs this code when the observable value changes
+                    int index = studentListFlowPane.getChildren().indexOf(s.getStudentPane());
+                    studentListFlowPane.getChildren().remove(s.getStudentPane());
+                    ImageView picture = new ImageView(s.getPicture());
+                    picture.setPreserveRatio(true);
+                    picture.setFitWidth(WIDTH);
+                    picture.setFitHeight(HEIGHT);
+                    BorderPane.setAlignment(picture, Pos.CENTER);
+                    s.getStudentPane().setCenter(picture);
+                    studentListFlowPane.getChildren().add(index, s.getStudentPane());
+                }));
+
+
+        //listens for changes in the studentlist and removes/adds the studentpanes accordingly
+        studentList.addListener((ListChangeListener<? super Student>) listChangeListener -> {
+            listChangeListener.next();
+            listChangeListener.getRemoved().forEach(s ->
+                    studentListFlowPane.getChildren().remove(s.getStudentPane()));
+        });
+        studentList.addListener((ListChangeListener<? super Student>) listChangeListener -> {
+            listChangeListener.next();
+            listChangeListener.getAddedSubList().forEach(s -> {
+                studentListFlowPane.getChildren().add(s.getStudentPane());
+            });
+        });
     }
 
     /**
@@ -69,7 +151,7 @@ public class AttendanceOverviewController implements Initializable {
         } else sessionManager = SessionManager.getInstance();
 
         if (!sessionManager.hasStudents())
-            sessionManager.setStudentList(createStudents(3));
+            sessionManager.setStudentList(createStudents());
 
         selectStudent();
         System.out.println(String.format("Students count: %d", sessionManager.getStudentList().size()));
@@ -78,50 +160,16 @@ public class AttendanceOverviewController implements Initializable {
     /**
      * Create students mock data.
      *
-     * @param amount The amount of students to create.
      * @return The created students.
      */
-    public List<Student> createStudents(int amount) {
-        var studentList = new ArrayList<Student>();
-
-        for (int i = 0; i < amount; i++) {
-            var firstName = String.format("%s %d", "Test First Name", i);
-            var lastName = String.format("%s %d", "Test Last Name", i);
-            var student = new Student();
-
-            student.setId(i);
-
-            switch (i) {
-                case 0:
-                    student.setFirstName("Shawn");
-                    student.setLastName("Mendes");
-                    student.setPicture("Data/Pictures/shawn mendes.png");
-                    break;
-                case 1:
-                    student.setFirstName("Justin");
-                    student.setLastName("Bieber");
-                    student.setPicture("Data/Pictures/justin bieber.png");
-                    break;
-                case 2:
-                    student.setFirstName("Adam");
-                    student.setLastName("Lavine");
-                    student.setPicture("Data/Pictures/adam lavine.png");
-                    break;
-            }
-
-            // Add attendance mock data.
-
-            // Randomize attendance data.
-            for (int a = 0; a < 5; a++) {
-                Random random = new Random();
-                student.attend(LocalDateTime.now().minusDays(random.nextInt(7)));
-            }
-
-
-            student.setStudentPane(addToStudentListFlowPane(student));
-            studentList.add(student);
-        }
-
+    public List<Student> createStudents() {
+        studentList.forEach(s -> {
+            s.setId(studentList.indexOf(s) + 1);
+            for (int i = 0; i < 100; i++)
+                s.attend(LocalDateTime.now().minusDays(random.nextInt(1000)));
+            s.setStudentPane(addToStudentListFlowPane(s));
+            s.setFirstName(s.getFirstName());
+        });
         return studentList;
     }
 
@@ -152,7 +200,7 @@ public class AttendanceOverviewController implements Initializable {
             studentListFlowPane.getChildren().forEach(studentNode -> {
                         var selectedNode = e.getPickResult().getIntersectedNode();
 
-                        if (selectedNode != null && studentNode.getAccessibleText().equals(selectedNode.getAccessibleText())
+                        if (selectedNode != null && studentNode.getAccessibleText()!=null && studentNode.getAccessibleText().equals(selectedNode.getAccessibleText())
                                 ^ studentNode.getAccessibleText().equals(selectedNode.getParent().getAccessibleText())) {
                             studentNode.setStyle(SELECTED_STYLE);
 

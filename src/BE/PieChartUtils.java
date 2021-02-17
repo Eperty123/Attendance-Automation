@@ -5,8 +5,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -24,20 +27,21 @@ public class PieChartUtils {
      */
     public static PieChart getStudentPieChart(List<Student> studentList) {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-        for (Student student : studentList) {
+            for (Student student : studentList) {
             AtomicInteger i = new AtomicInteger(0);
             student.getDaysAttended().forEach(d -> {
-                if (d.getDayOfWeek().getValue() < 6)
+                if (d.getDayOfWeek().getValue() < 6){
                     i.incrementAndGet();
+                }
             });
-            pieChartData.add(new PieChart.Data(student.getFullName(), i.get()));
+            pieChartData.add(new PieChart.Data(student.getFullName(), (double)(i.get()*100)/Student.dateSet.size()));
         }
 
         // Bind % value to the chart.
         pieChartData.forEach(data ->
                 data.nameProperty().bind(
                         Bindings.concat(
-                                data.getName(), " ", data.pieValueProperty(), " %"
+                                data.getName(), " ", data.pieValueProperty().getValue().intValue(), "% attendance"
                         )
                 )
         );
@@ -57,16 +61,16 @@ public class PieChartUtils {
         List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         int[] dayFreq = student.getWeekDaysAttended();
-        for (int i = 0; i <= 4; i++) {
+        for (int i = 0; i < 5; i++) {
             if (dayFreq[i] > 0)
-                pieChartData.add(new PieChart.Data(days.get(i), dayFreq[i]));
+                pieChartData.add(new PieChart.Data(days.get(i), (double)(dayFreq[i]*100)/ Arrays.stream(dayFreq).sum()));
         }
 
         // Bind % value to the chart.
         pieChartData.forEach(data ->
                 data.nameProperty().bind(
                         Bindings.concat(
-                                data.getName(), " ", data.pieValueProperty(), " %"
+                                data.getName(), " ", String.format("%.02f",data.pieValueProperty().getValue()), " %"
                         )
                 )
         );
@@ -121,7 +125,7 @@ public class PieChartUtils {
 
         for (int i = 0; i < 5; i++) {
             if (dayFreq[i] > 0)
-                pieChartData.add(new PieChart.Data(days.get(i), dayFreq[i]));
+                pieChartData.add(new PieChart.Data(days.get(i), Math.round((double)(dayFreq[i]*100)/ Arrays.stream(dayFreq).sum())));
         }
 
         // Bind % value to the chart.
