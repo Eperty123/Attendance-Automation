@@ -10,8 +10,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-import java.io.File;
-
 public class GUIHelper {
 
     /**
@@ -101,7 +99,7 @@ public class GUIHelper {
      * @param pieChart The input PieChart.
      * @return Returns the created BorderPane with the input PieChart attached.
      */
-    public static BorderPane createPieChartBorderPane(PieChart pieChart, Font font) {
+    public static BorderPane createPieChartBorderPane(PieChart pieChart, Student student, Font font) {
         if (pieChart != null) {
             var pane = new BorderPane();
 
@@ -110,26 +108,22 @@ public class GUIHelper {
 
             // Chart data.
             var pieData = pieChart.getData();
-            double totalPercentage = 0;
 
             // TODO: Correct the calculation of total absence (if wrong).
-            for (int i = 0; i < pieData.size(); i++) {
-                var percentage = pieData.get(i);
-                totalPercentage += percentage.getPieValue();
-            }
+            double totalPercentage = student.getAbsencePercentage();
 
-            var totalAbsencePercentageText = new Text(String.format("Total absence: %s%%", totalPercentage));
-            totalAbsencePercentageText.setFont(font);
-            BorderPane.setAlignment(totalAbsencePercentageText, Pos.CENTER);
-            pane.setBottom(totalAbsencePercentageText);
+        var totalAbsencePercentageText = new Text(String.format("Total absence: %s%%", totalPercentage));
+        totalAbsencePercentageText.setFont(font);
+        BorderPane.setAlignment(totalAbsencePercentageText, Pos.CENTER);
+        pane.setBottom(totalAbsencePercentageText);
 
-            // Add styling.
-            pane.setPadding(new Insets(8, 8, 8, 8));
-            FlowPane.setMargin(pane, new Insets(10, 10, 10, 10));
+        // Add styling.
+        pane.setPadding(new Insets(8, 8, 8, 8));
+        FlowPane.setMargin(pane, new Insets(10, 10, 10, 10));
 
-            // Return the created BorderPane.
-            return pane;
-        }
-        return null;
+        // Return the created BorderPane.
+        return pane;
     }
+        return null;
+}
 }

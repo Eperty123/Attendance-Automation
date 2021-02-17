@@ -66,9 +66,9 @@ public class AttendanceOverviewController implements Initializable {
      * initializes the student list
      */
     protected ObservableList<Student> studentList = FXCollections.observableArrayList(Arrays.asList(
-            new Student("Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
-            new Student("Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
-            new Student("Adam", "Lavine", "/GUI/Pictures/adamlavine.png")
+            new Student(0,"Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
+            new Student(1,"Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
+            new Student(2,"Adam", "Lavine", "/GUI/Pictures/adamlavine.png")
             )
     );
 
@@ -128,7 +128,14 @@ public class AttendanceOverviewController implements Initializable {
                     s.getStudentPane().setCenter(picture);
                     studentListFlowPane.getChildren().add(index, s.getStudentPane());
                 }));
-
+        //Loops through students
+        studentList.forEach(s -> s.idProperty().addListener((observable, t1, t2) -> {
+            int index = studentListFlowPane.getChildren().indexOf(s.getStudentPane());
+            studentListFlowPane.getChildren().remove(s.getStudentPane());
+            s.getStudentPane().setAccessibleText(String.format("%d", t2));
+            s.getStudentPane().getChildren().forEach(c->c.setAccessibleText(String.format("%d", t2)));
+            studentListFlowPane.getChildren().add(index, s.getStudentPane());
+        }));
 
         //listens for changes in the studentlist and removes/adds the studentpanes accordingly
         studentList.addListener((ListChangeListener<? super Student>) listChangeListener -> {
@@ -167,9 +174,8 @@ public class AttendanceOverviewController implements Initializable {
      */
     public List<Student> createStudents() {
         studentList.forEach(s -> {
-            s.setId(studentList.indexOf(s) + 1);
-            for (int i = 0; i < 100; i++)
-                s.attend(LocalDateTime.now().minusDays(random.nextInt(1000)));
+            for (int i = 0; i < 10; i++)
+                s.attend(LocalDateTime.now().minusDays(random.nextInt(10)));
             s.setStudentPane(addToStudentListFlowPane(s));
             s.setFirstName(s.getFirstName());
         });
@@ -214,7 +220,8 @@ public class AttendanceOverviewController implements Initializable {
                                     sessionManager.getStudentList().forEach((student) -> {
 
                                         // When the student id matches the accessible text (id), assign.
-                                        if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText())) {
+                                        if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText())||
+                                                Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
                                             // Make the student attend on click.
                                             student.attend();
                                             sessionManager.setSelectedStudent(student);
