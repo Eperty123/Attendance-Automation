@@ -47,7 +47,7 @@ public class AbsenceOverviewController implements Initializable {
     public void updateChart() {
 
         var chartInfo = PieChartUtils.getStudentPieChart(sessionManager.getSelectedStudent(), String.format("%s's Attendance", getSessionManager().getSelectedStudent().getFullName()));
-        var chartPane = GUIHelper.createPieChartBorderPane(chartInfo, FONT);
+        var chartPane = GUIHelper.createPieChartBorderPane(chartInfo,sessionManager.getSelectedStudent(), FONT);
         absenceFlowPane.getChildren().add(chartPane);
     }
 }

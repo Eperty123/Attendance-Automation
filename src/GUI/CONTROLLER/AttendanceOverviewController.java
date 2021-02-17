@@ -174,8 +174,8 @@ public class AttendanceOverviewController implements Initializable {
      */
     public List<Student> createStudents() {
         studentList.forEach(s -> {
-            for (int i = 0; i < 100; i++)
-                s.attend(LocalDateTime.now().minusDays(random.nextInt(1000)));
+            for (int i = 0; i < 10; i++)
+                s.attend(LocalDateTime.now().minusDays(random.nextInt(10)));
             s.setStudentPane(addToStudentListFlowPane(s));
             s.setFirstName(s.getFirstName());
         });
