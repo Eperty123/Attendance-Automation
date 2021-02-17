@@ -66,9 +66,9 @@ public class AttendanceOverviewController implements Initializable {
      * initializes the student list
      */
     protected ObservableList<Student> studentList = FXCollections.observableArrayList(Arrays.asList(
-            new Student("Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
-            new Student("Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
-            new Student("Adam", "Lavine", "/GUI/Pictures/adamlavine.png")
+            new Student(0,"Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
+            new Student(1,"Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
+            new Student(2,"Adam", "Lavine", "/GUI/Pictures/adamlavine.png")
             )
     );
 

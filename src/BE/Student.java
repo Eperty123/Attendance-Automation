@@ -48,7 +48,7 @@ public class Student {
         this.firstName.set(firstName);
         this.lastName.set(lastName);
         this.picture.setValue(new Image(pictureUrl));
-        //GUIHelper.createStudentBorderPane(this);
+        GUIHelper.createStudentBorderPane(this);
     }
 
     /**
