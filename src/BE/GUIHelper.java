@@ -25,7 +25,7 @@ public class GUIHelper {
      */
     public static BorderPane createStudentBorderPane(Student student, Font font, double width, double height, String style) {
         if (student != null) {
-            var pane = new BorderPane();
+            var paneReadyStudent = createStudentBorderPane(student);
 
             // Get the student's first and last name as well as picture path.
             Text studentName = new Text(String.format("%s \n%s", student.getFirstName(), student.getLastName()));
@@ -40,19 +40,14 @@ public class GUIHelper {
             BorderPane.setAlignment(picture, Pos.CENTER);
 
             // Add the elements (nodes) to the BorderPane.
-            pane.setTop(studentName);
-            pane.setCenter(picture);
+            paneReadyStudent.getStudentPane().setTop(studentName);
+            paneReadyStudent.getStudentPane().setCenter(picture);
 
             // Adding styling.
-            pane.setStyle(style);
-            pane.setPadding(new Insets(8, 8, 8, 8));
-            FlowPane.setMargin(pane, new Insets(10, 10, 10, 10));
-
-            // Assign an id.
-            pane.setAccessibleText(String.format("%d", student.getId()));
+            paneReadyStudent.getStudentPane().setStyle(style);
 
             // Return the created BorderPane.
-            return pane;
+            return paneReadyStudent.getStudentPane();
         }
         return null;
     }
@@ -63,7 +58,7 @@ public class GUIHelper {
      * @param student The student to create a BorderPane for.
      * @return Returns the created BorderPane. Null if the student is null.
      */
-    public static void createStudentBorderPane(Student student) {
+    public static Student createStudentBorderPane(Student student) {
         if (student != null) {
             var pane = new BorderPane();
 
@@ -91,9 +86,13 @@ public class GUIHelper {
             // Assign an id.
             pane.setAccessibleText(String.format("%d", student.getId()));
 
-            // Return the created BorderPane.
-            student.studentPane=pane;
+            // Assign the BorderPane to the student.
+            student.studentPane = pane;
+
+            // Return the student with the created BorderPane.
+            return student;
         }
+        return null;
     }
 
     /**
