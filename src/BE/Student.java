@@ -1,5 +1,10 @@
 package BE;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
 import java.time.LocalDate;
@@ -15,9 +20,9 @@ import java.util.Set;
  */
 public class Student {
     protected long id;
-    protected String firstName = "";
-    protected String lastName = "";
-    protected String picture;
+    protected StringProperty firstName = new SimpleStringProperty("");
+    protected StringProperty lastName = new SimpleStringProperty("");
+    protected ObjectProperty<Image> picture = new SimpleObjectProperty(new Image("/GUI/Pictures/noIMG.png"));
     protected List<LocalDateTime> daysAttended = new ArrayList<>();
     protected Absence mostAbsenceDay;
     protected Absence totalAbsence;
@@ -29,18 +34,21 @@ public class Student {
     }
 
     public Student(String firstName) {
-        this.firstName = firstName;
+        this.firstName.set(firstName);
+        GUIHelper.createStudentBorderPane(this);
     }
 
     public Student(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName.set(firstName);
+        this.lastName.set(lastName);
+        GUIHelper.createStudentBorderPane(this);
     }
 
     public Student(String firstName, String lastName, String pictureUrl) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        setPicture(pictureUrl);
+        this.firstName.set(firstName);
+        this.lastName.set(lastName);
+        this.picture.setValue(new Image(pictureUrl));
+        GUIHelper.createStudentBorderPane(this);
     }
 
     /**
@@ -71,7 +79,7 @@ public class Student {
      * @return
      */
     public String getFirstName() {
-        return firstName;
+        return firstName.get();
     }
 
     /**
@@ -80,7 +88,7 @@ public class Student {
      * @param firstName
      */
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName.set(firstName);
     }
 
     /**
@@ -89,7 +97,7 @@ public class Student {
      * @return
      */
     public String getLastName() {
-        return lastName;
+        return lastName.get();
     }
 
     /**
@@ -98,7 +106,7 @@ public class Student {
      * @param lastName
      */
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName.set(lastName);
     }
 
     /**
@@ -106,8 +114,8 @@ public class Student {
      *
      * @return
      */
-    public String getPicture() {
-        return picture;
+    public Image getPicture() {
+        return picture.get();
     }
 
     /**
@@ -116,7 +124,7 @@ public class Student {
      * @param picture
      */
     public void setPicture(String picture) {
-        this.picture = picture;
+        this.picture.set(new Image(picture));
     }
 
     /**
@@ -175,6 +183,30 @@ public class Student {
      */
     public void setStudentPane(BorderPane studentPane) {
         this.studentPane = studentPane;
+    }
+
+    /**
+     * Gets the first name property
+     * @return firstNAmeProperty
+     */
+    public StringProperty firstNameProperty() {
+        return firstName;
+    }
+
+    /**
+     * Gets the last name property
+     * @return lastNameProperty
+     */
+    public StringProperty lastNameProperty() {
+        return lastName;
+    }
+
+    /**
+     * Gets the picture property
+     * @return pictureProperty
+     */
+    public ObjectProperty<Image> pictureProperty() {
+        return picture;
     }
 
     /**
