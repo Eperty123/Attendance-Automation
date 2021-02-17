@@ -1,9 +1,6 @@
 package BE;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
@@ -19,7 +16,7 @@ import java.util.Set;
  * Use GUIHelper to create GUI stuff from the Student class.
  */
 public class Student {
-    protected long id;
+    protected LongProperty id = new SimpleLongProperty(0);
     protected StringProperty firstName = new SimpleStringProperty("");
     protected StringProperty lastName = new SimpleStringProperty("");
     protected ObjectProperty<Image> picture = new SimpleObjectProperty(new Image("/GUI/Pictures/noIMG.png"));
@@ -33,18 +30,21 @@ public class Student {
     public Student() {
     }
 
-    public Student(String firstName) {
+    public Student(int id,String firstName) {
+        this.id.setValue(id);
         this.firstName.set(firstName);
         GUIHelper.createStudentBorderPane(this);
     }
 
-    public Student(String firstName, String lastName) {
+    public Student(int id, String firstName, String lastName) {
+        this.id.setValue(id);
         this.firstName.set(firstName);
         this.lastName.set(lastName);
         GUIHelper.createStudentBorderPane(this);
     }
 
-    public Student(String firstName, String lastName, String pictureUrl) {
+    public Student(int id, String firstName, String lastName, String pictureUrl) {
+        this.id.setValue(id);
         this.firstName.set(firstName);
         this.lastName.set(lastName);
         this.picture.setValue(new Image(pictureUrl));
@@ -57,6 +57,14 @@ public class Student {
      * @return
      */
     public long getId() {
+        return id.get();
+    }
+
+    /**
+     * Gets the id property
+     * @return the id property
+     */
+    public LongProperty idProperty() {
         return id;
     }
 
@@ -66,7 +74,7 @@ public class Student {
      * @param id
      */
     public void setId(long id) {
-        this.id = id;
+        this.id.setValue(id);
     }
 
     public String getFullName() {
