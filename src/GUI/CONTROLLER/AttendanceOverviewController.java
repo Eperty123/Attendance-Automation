@@ -1,9 +1,9 @@
 package GUI.CONTROLLER;
 
 import BE.GUIHelper;
-import BE.Student;
 import BE.INTERFACE.ISessionManager;
 import BE.SessionManager;
+import BE.Student;
 import GUI.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -11,8 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
@@ -22,8 +20,10 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.ResourceBundle;
 
 public class AttendanceOverviewController implements Initializable {
 
@@ -65,9 +65,12 @@ public class AttendanceOverviewController implements Initializable {
     /**
      * initializes the student list
      */
-    protected ObservableList<Student> studentList = FXCollections.observableArrayList(Arrays.asList(new Student("Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
+    protected ObservableList<Student> studentList = FXCollections.observableArrayList(Arrays.asList(
+            new Student("Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
             new Student("Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
-            new Student("Adam", "Lavine", "/GUI/Pictures/adamlavine.png")));
+            new Student("Adam", "Lavine", "/GUI/Pictures/adamlavine.png")
+            )
+    );
 
     @FXML
     public FlowPane studentListFlowPane;
@@ -200,7 +203,7 @@ public class AttendanceOverviewController implements Initializable {
             studentListFlowPane.getChildren().forEach(studentNode -> {
                         var selectedNode = e.getPickResult().getIntersectedNode();
 
-                        if (selectedNode != null && studentNode.getAccessibleText()!=null && studentNode.getAccessibleText().equals(selectedNode.getAccessibleText())
+                        if (selectedNode != null && studentNode.getAccessibleText() != null && studentNode.getAccessibleText().equals(selectedNode.getAccessibleText())
                                 ^ studentNode.getAccessibleText().equals(selectedNode.getParent().getAccessibleText())) {
                             studentNode.setStyle(SELECTED_STYLE);
 
