@@ -2,6 +2,8 @@ package GUI.CONTROLLER;
 
 import BE.*;
 import BE.INTERFACE.ISessionManager;
+import BE.Utils.GUIHelper;
+import BE.Utils.SessionManager;
 import GUI.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -70,12 +72,20 @@ public class AttendanceOverviewController implements Initializable {
     /**
      * initializes the student list
      */
+    protected ObservableList<Person> personList = FXCollections.observableArrayList(Arrays.asList());
+
+    protected ObservableList<Teacher> teacherList = FXCollections.observableArrayList(Arrays.asList(
+            new Teacher(69,"Dancing", "Pepe","GUI/Pictures/tenor.gif"))
+    );
+
+    /**
+     * initializes the student list
+     */
     protected ObservableList<Student> studentList = FXCollections.observableArrayList(Arrays.asList(
             new Student(0, "Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
             new Student(1, "Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
-            new Student(2, "Adam", "Lavine", "/GUI/Pictures/adamlavine.png")
-            )
-    );
+            new Student(2, "Adam", "Lavine", "/GUI/Pictures/adamlavine.png")));
+
 
     @FXML
     public FlowPane studentListFlowPane;
@@ -83,6 +93,9 @@ public class AttendanceOverviewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeSessionManager();
+        personList.addAll(studentList);
+        personList.addAll(teacherList);
+        studentListFlowPane.getChildren().add(teacherList.get(0).getPersonPane());
         CRUDListeners();
     }
 
@@ -91,67 +104,67 @@ public class AttendanceOverviewController implements Initializable {
      */
     private void CRUDListeners() {
         //Loops through students
-        studentList.forEach(s ->
+        personList.forEach(person ->
                 //adds change listener
-                s.firstNameProperty().addListener((observable, t1, t2) -> {
+                person.firstNameProperty().addListener((observable, t1, t2) -> {
                     //Runs this code when the observable value changes
-                    int index = studentListFlowPane.getChildren().indexOf(s.getStudentPane());
-                    studentListFlowPane.getChildren().remove(s.getStudentPane());
-                    Text studentName = new Text(String.format("%s \n%s", t2, s.getLastName()));
+                    int index = studentListFlowPane.getChildren().indexOf(person.getPersonPane());
+                    studentListFlowPane.getChildren().remove(person.getPersonPane());
+                    Text studentName = new Text(String.format("%s \n%s", t2, person.getLastName()));
                     studentName.setFont(FONT);
                     BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
-                    s.getStudentPane().setTop(studentName);
-                    studentListFlowPane.getChildren().add(index, s.getStudentPane());
+                    person.getPersonPane().setTop(studentName);
+                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
                 }));
 
         //Loops through students
-        studentList.forEach(s ->
+        personList.forEach(person ->
                 //adds change listener
-                s.lastNameProperty().addListener((observable, t1, t2) -> {
+                person.lastNameProperty().addListener((observable, t1, t2) -> {
                     //Runs this code when the observable value changes
-                    int index = studentListFlowPane.getChildren().indexOf(s.getStudentPane());
-                    studentListFlowPane.getChildren().remove(s.getStudentPane());
-                    Text studentName = new Text(String.format("%s \n%s", s.getFirstName(), t2));
+                    int index = studentListFlowPane.getChildren().indexOf(person.getPersonPane());
+                    studentListFlowPane.getChildren().remove(person.getPersonPane());
+                    Text studentName = new Text(String.format("%s \n%s", person.getFirstName(), t2));
                     studentName.setFont(FONT);
                     BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
-                    s.getStudentPane().setTop(studentName);
-                    studentListFlowPane.getChildren().add(index, s.getStudentPane());
+                    person.getPersonPane().setTop(studentName);
+                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
                 }));
 
         //Loops through students
-        studentList.forEach(s ->
+        personList.forEach(person ->
                 //adds change listener
-                s.pictureProperty().addListener((observable, t1, t2) -> {
+                person.pictureProperty().addListener((observable, t1, t2) -> {
                     //Runs this code when the observable value changes
-                    int index = studentListFlowPane.getChildren().indexOf(s.getStudentPane());
-                    studentListFlowPane.getChildren().remove(s.getStudentPane());
-                    ImageView picture = new ImageView(s.getPicture());
+                    int index = studentListFlowPane.getChildren().indexOf(person.getPersonPane());
+                    studentListFlowPane.getChildren().remove(person.getPersonPane());
+                    ImageView picture = new ImageView(person.getPicture());
                     picture.setPreserveRatio(true);
                     picture.setFitWidth(WIDTH);
                     picture.setFitHeight(HEIGHT);
                     BorderPane.setAlignment(picture, Pos.CENTER);
-                    s.getStudentPane().setCenter(picture);
-                    studentListFlowPane.getChildren().add(index, s.getStudentPane());
+                    person.getPersonPane().setCenter(picture);
+                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
                 }));
         //Loops through students
-        studentList.forEach(s -> s.idProperty().addListener((observable, t1, t2) -> {
-            int index = studentListFlowPane.getChildren().indexOf(s.getStudentPane());
-            studentListFlowPane.getChildren().remove(s.getStudentPane());
-            s.getStudentPane().setAccessibleText(String.format("%d", t2));
-            s.getStudentPane().getChildren().forEach(c -> c.setAccessibleText(String.format("%d", t2)));
-            studentListFlowPane.getChildren().add(index, s.getStudentPane());
+        personList.forEach(person -> person.idProperty().addListener((observable, t1, t2) -> {
+            int index = studentListFlowPane.getChildren().indexOf(person.getPersonPane());
+            studentListFlowPane.getChildren().remove(person.getPersonPane());
+            person.getPersonPane().setAccessibleText(String.format("%d", t2));
+            person.getPersonPane().getChildren().forEach(c -> c.setAccessibleText(String.format("%d", t2)));
+            studentListFlowPane.getChildren().add(index, person.getPersonPane());
         }));
 
         //listens for changes in the studentlist and removes/adds the studentpanes accordingly
-        studentList.addListener((ListChangeListener<? super Student>) listChangeListener -> {
+        personList.addListener((ListChangeListener<? super Person>) listChangeListener -> {
             listChangeListener.next();
-            listChangeListener.getRemoved().forEach(s ->
-                    studentListFlowPane.getChildren().remove(s.getStudentPane()));
+            listChangeListener.getRemoved().forEach(person ->
+                    studentListFlowPane.getChildren().remove(person.getPersonPane()));
         });
-        studentList.addListener((ListChangeListener<? super Student>) listChangeListener -> {
+        personList.addListener((ListChangeListener<? super Person>) listChangeListener -> {
             listChangeListener.next();
-            listChangeListener.getAddedSubList().forEach(s -> {
-                studentListFlowPane.getChildren().add(s.getStudentPane());
+            listChangeListener.getAddedSubList().forEach(person -> {
+                studentListFlowPane.getChildren().add(person.getPersonPane());
             });
         });
     }
@@ -180,7 +193,7 @@ public class AttendanceOverviewController implements Initializable {
     public List<Student> createStudents() {
         studentList.forEach(s -> {
             for (int i = 0; i < 10; i++)
-                s.attend(LocalDateTime.now().minusDays(random.nextInt(10)));
+                s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(10)));
             s.setStudentPane(addToStudentListFlowPane(s));
             s.setFirstName(s.getFirstName());
         });
@@ -227,13 +240,7 @@ public class AttendanceOverviewController implements Initializable {
                                         // When the student id matches the accessible text (id), assign.
                                         if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText()) ||
                                                 Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
-
-                                            // Make the student attend on click.
-                                            // Check if the student has already registered for today, if not attend, otherwise don't do nothing.
-                                            if (!student.hasAttendedToday()) {
-                                                student.attend();
-                                                System.out.println(String.format("Student: %s attended at: %s", student.getFullName(), student.getLastAttendance()));
-                                            }
+                                                student.getAttendanceUtil().attend();
                                             sessionManager.setSelectedStudent(student);
                                             //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                                         }

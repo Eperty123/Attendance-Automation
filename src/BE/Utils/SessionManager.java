@@ -1,6 +1,7 @@
-package BE;
+package BE.Utils;
 
 import BE.INTERFACE.ISessionManager;
+import BE.Student;
 import GUI.Main;
 
 import java.util.List;

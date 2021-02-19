@@ -1,5 +1,6 @@
-package BE;
+package BE.Utils;
 
+import BE.Student;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -19,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public class BarChartUtils {
+    static List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 
     /**
      * Loops thought the students to get the frequency of each date and returns a barchart of these data.
@@ -27,7 +29,6 @@ public class BarChartUtils {
      * @return a bar chart of the students' attendance
      */
     public static BarChart<String, Number> getTotalIndividualAttendanceBarChart(List<Student> students) {
-        List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setCategories(FXCollections.<String>observableList(days));
         NumberAxis yAxis = new NumberAxis();
@@ -38,8 +39,8 @@ public class BarChartUtils {
         for (Student student : students) {
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName(student.getFullName());
-            List<LocalDateTime> attendedDates = new ArrayList<>(student.getDaysAttended());
-            int[] dayFreq = student.getWeekDaysAttended();
+            List<LocalDateTime> attendedDates = new ArrayList<>(student.getAttendanceUtil().getDaysAttended());
+            int[] dayFreq = student.getAttendanceUtil().getWeekDaysAttended();
             for (int i = 0; i <= 4; i++) {
                 series.getData().add(new XYChart.Data<>(days.get(i), dayFreq[i]));
             }
@@ -55,7 +56,6 @@ public class BarChartUtils {
      * @return a BarChart
      */
     public static BarChart<String, Number> getTotalIndividualAbsenceBarChart(List<Student> students) {
-        List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setCategories(FXCollections.<String>observableList(days));
         NumberAxis yAxis = new NumberAxis();
@@ -66,7 +66,7 @@ public class BarChartUtils {
         for (Student student : students) {
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName(student.getFullName());
-            int[] dayFreq = student.getWeekDaysAbsent();
+            int[] dayFreq = student.getAttendanceUtil().getWeekDaysAbsent();
             for (int i = 0; i <= 4; i++) {
                 series.getData().add(new XYChart.Data<>(days.get(i), dayFreq[i]));
             }
@@ -106,7 +106,6 @@ public class BarChartUtils {
      * @return A barchart containing the frequency of the days for the student
      */
     public static BarChart<String, Number> getTotalAttendanceBarChart(Student student) {
-        List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setCategories(FXCollections.<String>observableList(days));
         NumberAxis yAxis = new NumberAxis();
@@ -116,7 +115,7 @@ public class BarChartUtils {
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName(student.getFullName());
-        int[] dayFreq = student.getWeekDaysAttended();
+        int[] dayFreq = student.getAttendanceUtil().getWeekDaysAttended();
         for (int i = 0; i <= 4; i++) {
             series.getData().add(new XYChart.Data<>(days.get(i), dayFreq[i]));
         }
@@ -142,7 +141,7 @@ public class BarChartUtils {
         series1.setName("Total attendance");
         studentList.forEach(p -> {
             AtomicInteger i = new AtomicInteger();
-            p.getDaysAttended().forEach(d -> {
+            p.getAttendanceUtil().getDaysAttended().forEach(d -> {
                 if (d.getDayOfWeek().getValue() < 6)
                     i.getAndIncrement();
             });
@@ -159,7 +158,6 @@ public class BarChartUtils {
      * @return A bar chart with the data.
      */
     public static BarChart<String, Number> getAttendancePerDay(List<Student> studentList) {
-        List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
         CategoryAxis xAxis = new CategoryAxis();
         xAxis.setCategories(FXCollections.observableList(days));
         xAxis.setLabel("Day");
@@ -171,7 +169,7 @@ public class BarChartUtils {
         series.setName("Total attendance");
         int[] dayFreq = new int[5];
         studentList.forEach(student -> {
-            student.getDaysAttended().forEach(d -> {
+            student.getAttendanceUtil().getDaysAttended().forEach(d -> {
                 if (d.getDayOfWeek().getValue() < 6)
                     dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
             });

@@ -1,4 +1,6 @@
-package BE;
+package BE.Utils;
+
+import BE.Student;
 
 import java.util.List;
 

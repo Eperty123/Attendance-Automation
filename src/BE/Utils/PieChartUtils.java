@@ -1,15 +1,14 @@
-package BE;
+package BE.Utils;
 
+import BE.Student;
+import BE.Utils.AttendanceUtil;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -18,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 
 public class PieChartUtils {
+    static List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 
     /**
      * Gets the students fraction of total attendance
@@ -29,12 +29,12 @@ public class PieChartUtils {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             for (Student student : studentList) {
             AtomicInteger i = new AtomicInteger(0);
-            student.getDaysAttended().forEach(d -> {
+            student.getAttendanceUtil().getDaysAttended().forEach(d -> {
                 if (d.getDayOfWeek().getValue() < 6){
                     i.incrementAndGet();
                 }
             });
-            pieChartData.add(new PieChart.Data(student.getFullName(), (double)(i.get()*100)/Student.dateSet.size()));
+            pieChartData.add(new PieChart.Data(student.getFullName(), (double)(i.get()*100)/ AttendanceUtil.dateSet.size()));
         }
 
         // Bind % value to the chart.
@@ -60,7 +60,7 @@ public class PieChartUtils {
     public static PieChart getStudentPieChart(Student student, String title) {
         List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-        int[] dayFreq = student.getWeekDaysAttended();
+        int[] dayFreq = student.getAttendanceUtil().getWeekDaysAttended();
         for (int i = 0; i < 5; i++) {
             if (dayFreq[i] > 0)
                 pieChartData.add(new PieChart.Data(days.get(i), (double)(dayFreq[i]*100)/ Arrays.stream(dayFreq).sum()));
@@ -88,7 +88,7 @@ public class PieChartUtils {
     public static PieChart getStudentAbsencePieChart(List<Student> students){
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         students.forEach(s->{
-        pieChartData.add(new PieChart.Data(s.getFullName(), (double)(s.getTotalAbsence()*100)/Student.dateSet.size()));
+        pieChartData.add(new PieChart.Data(s.getFullName(), (double)(s.getAttendanceUtil().getTotalAbsence()*100)/AttendanceUtil.dateSet.size()));
         });
 
 
@@ -117,7 +117,7 @@ public class PieChartUtils {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         int[] dayFreq = new int[5];
         studentList.forEach(student -> {
-            student.getDaysAttended().forEach(d -> {
+            student.getAttendanceUtil().getDaysAttended().forEach(d -> {
                 if (d.getDayOfWeek().getValue() < 6)
                     dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
             });
@@ -141,10 +141,9 @@ public class PieChartUtils {
     }
 
     public static PieChart getAttendancePerDayPieChart(Student student) {
-        List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         int[] dayFreq = new int[5];
-        student.getDaysAttended().forEach(d -> {
+        student.getAttendanceUtil().getDaysAttended().forEach(d -> {
             if (d.getDayOfWeek().getValue() < 6)
                 dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
         });

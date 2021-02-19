@@ -1,36 +1,42 @@
 package BE;
 
 import BE.Utils.AttendanceUtil;
+import BE.Utils.GUIHelper;
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
-/**
- * The class responsible for defining Students.
- * Use GUIHelper to create GUI stuff from the Student class.
- */
-public class Student extends Person{
-    protected BorderPane studentPane;
+public class Person {
+    protected LongProperty id = new SimpleLongProperty(0);
+    protected StringProperty firstName = new SimpleStringProperty("");
+    protected StringProperty lastName = new SimpleStringProperty("");
+    protected ObjectProperty<Image> picture = new SimpleObjectProperty<Image>(new Image("/GUI/Pictures/noIMG.png"));
+    protected BorderPane personPane;
     protected AttendanceUtil attendanceUtil;
 
-    public Student() {
-        super();
+    public Person() {
         attendanceUtil = new AttendanceUtil();
     }
 
-    public Student(int id, String firstName) {
-        super(id,firstName);
-        attendanceUtil = new AttendanceUtil();
+    public Person(int id, String firstName) {
+        this.id.setValue(id);
+        this.firstName.set(firstName);
+        GUIHelper.createPersonBorderPane(this);
     }
 
-    public Student(int id, String firstName, String lastName) {
-        super(id,firstName,lastName);
-        attendanceUtil = new AttendanceUtil();
+    public Person(int id, String firstName, String lastName) {
+        this.id.setValue(id);
+        this.firstName.set(firstName);
+        this.lastName.set(lastName);
+        GUIHelper.createPersonBorderPane(this);
     }
 
-    public Student(int id, String firstName, String lastName, String pictureUrl) {
-        super(id,firstName,lastName,pictureUrl);
-        attendanceUtil = new AttendanceUtil();
+    public Person(int id, String firstName, String lastName, String pictureUrl) {
+        this.id.setValue(id);
+        this.firstName.set(firstName);
+        this.lastName.set(lastName);
+        this.picture.setValue(new Image(pictureUrl));
+        GUIHelper.createPersonBorderPane(this);
     }
 
     /**
@@ -38,9 +44,8 @@ public class Student extends Person{
      *
      * @return
      */
-    @Override
     public long getId() {
-        return super.id.get();
+        return id.get();
     }
 
 
@@ -49,9 +54,8 @@ public class Student extends Person{
      *
      * @return the id property
      */
-    @Override
     public LongProperty idProperty() {
-        return super.id;
+        return id;
     }
 
     /**
@@ -59,14 +63,12 @@ public class Student extends Person{
      *
      * @param id
      */
-    @Override
     public void setId(long id) {
-        super.id.setValue(id);
+        this.id.setValue(id);
     }
 
-    @Override
     public String getFullName() {
-        return String.format("%s %s", super.getFirstName(), super.getLastName());
+        return String.format("%s %s", getFirstName(), getLastName());
     }
 
     /**
@@ -74,9 +76,8 @@ public class Student extends Person{
      *
      * @return
      */
-    @Override
     public String getFirstName() {
-        return super.firstName.get();
+        return firstName.get();
     }
 
     /**
@@ -84,9 +85,8 @@ public class Student extends Person{
      *
      * @param firstName
      */
-    @Override
     public void setFirstName(String firstName) {
-        super.firstName.set(firstName);
+        this.firstName.set(firstName);
     }
 
     /**
@@ -94,9 +94,8 @@ public class Student extends Person{
      *
      * @return
      */
-    @Override
     public String getLastName() {
-        return super.lastName.get();
+        return lastName.get();
     }
 
     /**
@@ -104,9 +103,8 @@ public class Student extends Person{
      *
      * @param lastName
      */
-    @Override
     public void setLastName(String lastName) {
-        super.lastName.set(lastName);
+        this.lastName.set(lastName);
     }
 
     /**
@@ -114,9 +112,8 @@ public class Student extends Person{
      *
      * @return
      */
-    @Override
     public Image getPicture() {
-        return super.picture.get();
+        return picture.get();
     }
 
     /**
@@ -124,9 +121,8 @@ public class Student extends Person{
      *
      * @param picture
      */
-    @Override
     public void setPicture(String picture) {
-        super.picture.set(new Image(picture));
+        this.picture.set(new Image(picture));
     }
 
     /**
@@ -134,8 +130,8 @@ public class Student extends Person{
      *
      * @return
      */
-    public BorderPane getStudentPane() {
-        return super.personPane;
+    public BorderPane getPersonPane() {
+        return personPane;
     }
 
     /**
@@ -143,8 +139,8 @@ public class Student extends Person{
      *
      * @param studentPane
      */
-    public void setStudentPane(BorderPane studentPane) {
-        super.personPane = studentPane;
+    public void setPersonPane(BorderPane studentPane) {
+        this.personPane = studentPane;
     }
 
     /**
@@ -152,9 +148,8 @@ public class Student extends Person{
      *
      * @return firstNAmeProperty
      */
-    @Override
     public StringProperty firstNameProperty() {
-        return super.firstName;
+        return firstName;
     }
 
     /**
@@ -162,9 +157,8 @@ public class Student extends Person{
      *
      * @return lastNameProperty
      */
-    @Override
     public StringProperty lastNameProperty() {
-        return super.lastName;
+        return lastName;
     }
 
     /**
@@ -172,20 +166,7 @@ public class Student extends Person{
      *
      * @return pictureProperty
      */
-    @Override
     public ObjectProperty<Image> pictureProperty() {
-        return super.picture;
-    }
-
-    public AttendanceUtil getAttendanceUtil() {
-        return attendanceUtil;
-    }
-
-    /**
-     * Gets the total absence from the attendance util
-     * @return the total absence
-     */
-    public int getTotalAbsence(){
-        return attendanceUtil.getTotalAbsence();
+        return picture;
     }
 }

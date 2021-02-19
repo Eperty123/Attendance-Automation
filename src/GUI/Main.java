@@ -1,7 +1,7 @@
 package GUI;
 
 import BE.INTERFACE.ISessionManager;
-import BE.SessionManager;
+import BE.Utils.SessionManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
