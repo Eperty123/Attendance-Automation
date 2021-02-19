@@ -161,6 +161,26 @@ public class Student {
     }
 
     /**
+     *
+     */
+    public int[] getWeekDaysAbsent(){
+        int[] dayFreq = new int[5];
+        absentDays.forEach(d -> {
+                    if (d.getDayOfWeek().getValue() < 6)
+                        dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
+                }
+        );
+        return dayFreq;
+    }
+
+    /**
+     * returns a list of the absent days
+     */
+    public List<LocalDate> getAbsentDays(){
+        return absentDays;
+    }
+
+    /**
      * gets days with atleast one attend
      * @return a set of days
      */

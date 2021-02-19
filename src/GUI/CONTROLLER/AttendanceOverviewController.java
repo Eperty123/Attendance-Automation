@@ -1,9 +1,7 @@
 package GUI.CONTROLLER;
 
-import BE.GUIHelper;
+import BE.*;
 import BE.INTERFACE.ISessionManager;
-import BE.SessionManager;
-import BE.Student;
 import GUI.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
