@@ -9,7 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.logging.SimpleFormatter;
 
 public class StudentDashboardController implements Initializable {
 
@@ -19,6 +23,8 @@ public class StudentDashboardController implements Initializable {
     public Button backToAttendanceOverviewBtn;
     @FXML
     public Text welcomeLbl;
+    @FXML
+    public Text lastAttendanceLbl;
 
     /**
      * The ISessionManager for handling session data.
@@ -52,6 +58,10 @@ public class StudentDashboardController implements Initializable {
         if (sessionManager != null) {
             if (sessionManager.hasStudents()) {
                 Platform.runLater(() -> welcomeLbl.setText(String.format("Welcome, %s", getSelectedStudent().getFirstName())));
+                var lastAttendance = getSelectedStudent().getLastAttendance();
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy");
+                String formatDateTime = lastAttendance.format(format);
+                Platform.runLater(() -> lastAttendanceLbl.setText(String.format("Last Attendance: %s", formatDateTime)));
                 System.out.println(String.format("Selected student: %s (id: %d)", getSelectedStudent().getFullName(), getSelectedStudent().getId()));
             } else System.out.println("No students found!");
         }
@@ -60,6 +70,7 @@ public class StudentDashboardController implements Initializable {
 
     /**
      * The event handler for going back to the student overview.
+     *
      * @throws Exception
      */
     public void backToAttendanceOverview() throws Exception {
@@ -86,6 +97,7 @@ public class StudentDashboardController implements Initializable {
 
     /**
      * Get the selected student.
+     *
      * @return
      */
     public Student getSelectedStudent() {

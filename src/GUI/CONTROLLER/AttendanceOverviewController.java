@@ -1,5 +1,6 @@
 package GUI.CONTROLLER;
 
+import BE.DateUtility;
 import BE.GUIHelper;
 import BE.INTERFACE.ISessionManager;
 import BE.SessionManager;
@@ -19,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -66,9 +68,9 @@ public class AttendanceOverviewController implements Initializable {
      * initializes the student list
      */
     protected ObservableList<Student> studentList = FXCollections.observableArrayList(Arrays.asList(
-            new Student(0,"Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
-            new Student(1,"Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
-            new Student(2,"Adam", "Lavine", "/GUI/Pictures/adamlavine.png")
+            new Student(0, "Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
+            new Student(1, "Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
+            new Student(2, "Adam", "Lavine", "/GUI/Pictures/adamlavine.png")
             )
     );
 
@@ -133,7 +135,7 @@ public class AttendanceOverviewController implements Initializable {
             int index = studentListFlowPane.getChildren().indexOf(s.getStudentPane());
             studentListFlowPane.getChildren().remove(s.getStudentPane());
             s.getStudentPane().setAccessibleText(String.format("%d", t2));
-            s.getStudentPane().getChildren().forEach(c->c.setAccessibleText(String.format("%d", t2)));
+            s.getStudentPane().getChildren().forEach(c -> c.setAccessibleText(String.format("%d", t2)));
             studentListFlowPane.getChildren().add(index, s.getStudentPane());
         }));
 
@@ -220,10 +222,13 @@ public class AttendanceOverviewController implements Initializable {
                                     sessionManager.getStudentList().forEach((student) -> {
 
                                         // When the student id matches the accessible text (id), assign.
-                                        if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText())||
+                                        if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText()) ||
                                                 Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
+
                                             // Make the student attend on click.
-                                            student.attend();
+                                            // Check if the student has already registered for today, if not attend, otherwise don't do nothing.
+                                            if (DateUtility.isPast(LocalDate.now(), student.getLastAttendance().toLocalDate()))
+                                                student.attend();
                                             sessionManager.setSelectedStudent(student);
                                             //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                                         }

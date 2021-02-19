@@ -162,6 +162,7 @@ public class Student {
 
     /**
      * gets days with atleast one attend
+     *
      * @return a set of days
      */
     public Set<LocalDate> getDaysWithAtleastOneAttend() {
@@ -258,5 +259,14 @@ public class Student {
                 dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
         });
         return dayFreq;
+    }
+
+    /**
+     * Get the last attendance date.
+     *
+     * @return
+     */
+    public LocalDateTime getLastAttendance() {
+        return getDaysAttended().get(getDaysAttended().size() - 1);
     }
 }
