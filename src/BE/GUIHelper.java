@@ -110,7 +110,7 @@ public class GUIHelper {
             var pieData = pieChart.getData();
 
             // TODO: Correct the calculation of total absence (if wrong).
-            double totalPercentage = student.getAbsencePercentage();
+            double totalPercentage = student.getAttendanceUtil().getAbsencePercentage();
 
         var totalAbsencePercentageText = new Text(String.format("Total absence: %s%%", totalPercentage));
         totalAbsencePercentageText.setFont(font);

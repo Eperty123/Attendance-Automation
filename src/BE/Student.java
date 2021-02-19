@@ -17,22 +17,22 @@ public class Student {
     protected StringProperty firstName = new SimpleStringProperty("");
     protected StringProperty lastName = new SimpleStringProperty("");
     protected ObjectProperty<Image> picture = new SimpleObjectProperty<Image>(new Image("/GUI/Pictures/noIMG.png"));
-    protected List<LocalDateTime> daysAttended = new ArrayList<>();
     protected BorderPane studentPane;
-    protected List<LocalDate> absentDays = new ArrayList<>();
-    protected static Set<LocalDate> dateSet = new HashSet<LocalDate>();
-    protected Set<LocalDate> studentDateSet = new HashSet<LocalDate>();
+    protected AttendanceUtil attendanceUtil;
 
     public Student() {
+        attendanceUtil = new AttendanceUtil();
     }
 
     public Student(int id, String firstName) {
+        attendanceUtil = new AttendanceUtil();
         this.id.setValue(id);
         this.firstName.set(firstName);
         GUIHelper.createStudentBorderPane(this);
     }
 
     public Student(int id, String firstName, String lastName) {
+        attendanceUtil = new AttendanceUtil();
         this.id.setValue(id);
         this.firstName.set(firstName);
         this.lastName.set(lastName);
@@ -40,6 +40,7 @@ public class Student {
     }
 
     public Student(int id, String firstName, String lastName, String pictureUrl) {
+        attendanceUtil = new AttendanceUtil();
         this.id.setValue(id);
         this.firstName.set(firstName);
         this.lastName.set(lastName);
@@ -56,9 +57,6 @@ public class Student {
         return id.get();
     }
 
-    public double getAbsencePercentage() {
-        return (double) (absentDays.size() * 100) / Student.dateSet.size();
-    }
 
     /**
      * Gets the id property
@@ -137,59 +135,6 @@ public class Student {
     }
 
     /**
-     * Get the student's most absent day.
-     *
-     * @return
-     */
-    public OptionalInt getMostAbsenceDay() {
-        int[] dayFreq = new int[5];
-        absentDays.forEach(d -> {
-                    if (d.getDayOfWeek().getValue() < 6)
-                        dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
-                }
-        );
-        return Arrays.stream(dayFreq).max();
-    }
-
-    /**
-     * Get the student's total absence.
-     *
-     * @return
-     */
-    public int getTotalAbsence() {
-        return absentDays.size();
-    }
-
-    /**
-     *
-     */
-    public int[] getWeekDaysAbsent(){
-        int[] dayFreq = new int[5];
-        absentDays.forEach(d -> {
-                    if (d.getDayOfWeek().getValue() < 6)
-                        dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
-                }
-        );
-        return dayFreq;
-    }
-
-    /**
-     * returns a list of the absent days
-     */
-    public List<LocalDate> getAbsentDays(){
-        return absentDays;
-    }
-
-    /**
-     * gets days with atleast one attend
-     *
-     * @return a set of days
-     */
-    public Set<LocalDate> getDaysWithAtleastOneAttend() {
-        return dateSet;
-    }
-
-    /**
      * Get the student's assigned BorderPane.
      *
      * @return
@@ -234,59 +179,15 @@ public class Student {
         return picture;
     }
 
-    /**
-     * Gets the days attended.
-     *
-     * @return the days attended.
-     */
-    public List<LocalDateTime> getDaysAttended() {
-        return daysAttended;
+    public AttendanceUtil getAttendanceUtil() {
+        return attendanceUtil;
     }
 
     /**
-     * Attends current date
+     * Gets the total absence from the attendance util
+     * @return the total absence
      */
-    public void attend() {
-        daysAttended.add(LocalDateTime.now());
-        studentDateSet.add(LocalDate.now());
-        dateSet.add(LocalDate.now());
-        absentDays = new ArrayList<>(Student.dateSet);
-        absentDays.removeAll(this.studentDateSet);
-    }
-
-    /**
-     * Attends a specific date.
-     *
-     * @param localDateTime the date you want to add
-     */
-    public void attend(LocalDateTime localDateTime) {
-        daysAttended.add(localDateTime);
-        studentDateSet.add(localDateTime.toLocalDate());
-        dateSet.add(localDateTime.toLocalDate());
-        absentDays = new ArrayList<>(Student.dateSet);
-        absentDays.removeAll(this.studentDateSet);
-    }
-
-    /**
-     * Get the student's weeks attended.
-     *
-     * @return
-     */
-    public int[] getWeekDaysAttended() {
-        int[] dayFreq = new int[5];
-        this.studentDateSet.forEach(d -> {
-            if (d.getDayOfWeek().getValue() < 6)
-                dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
-        });
-        return dayFreq;
-    }
-
-    /**
-     * Get the last attendance date.
-     *
-     * @return
-     */
-    public LocalDateTime getLastAttendance() {
-        return getDaysAttended().get(getDaysAttended().size() - 1);
+    public int getTotalAbsence(){
+        return attendanceUtil.getTotalAbsence();
     }
 }

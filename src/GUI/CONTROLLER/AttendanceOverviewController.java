@@ -174,7 +174,7 @@ public class AttendanceOverviewController implements Initializable {
     public List<Student> createStudents() {
         studentList.forEach(s -> {
             for (int i = 0; i < 10; i++)
-                s.attend(LocalDateTime.now().minusDays(random.nextInt(10)));
+                s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(10)));
             s.setStudentPane(addToStudentListFlowPane(s));
             s.setFirstName(s.getFirstName());
         });
@@ -224,8 +224,8 @@ public class AttendanceOverviewController implements Initializable {
 
                                             // Make the student attend on click.
                                             // Check if the student has already registered for today, if not attend, otherwise don't do nothing.
-                                            if (DateUtility.isPast(LocalDate.now(), student.getLastAttendance().toLocalDate()))
-                                                student.attend();
+                                            if (DateUtility.isPast(LocalDate.now(), student.getAttendanceUtil().getLastAttendance().toLocalDate()))
+                                                student.getAttendanceUtil().attend();
                                             sessionManager.setSelectedStudent(student);
                                             //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                                         }
