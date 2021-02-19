@@ -5,26 +5,36 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.CONTROLLER.TeacherLoginController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" />
-      <Button layoutX="428.0" layoutY="279.0" mnemonicParsing="false" text="Login" />
-      <TextField layoutX="126.0" layoutY="243.0" prefHeight="25.0" prefWidth="348.0" />
-      <TextField layoutX="126.0" layoutY="188.0" prefHeight="25.0" prefWidth="348.0" />
-      <Label layoutX="126.0" layoutY="159.0" text="Username">
-         <font>
-            <Font size="20.0" />
-         </font></Label>
-      <Label layoutX="129.0" layoutY="213.0" text="Password">
-         <font>
-            <Font size="20.0" />
-         </font></Label>
-      <Label layoutX="226.0" layoutY="67.0" text="Teacher Login">
-         <font>
-            <Font size="24.0" />
-         </font></Label>
-      <Button layoutX="126.0" layoutY="279.0" mnemonicParsing="false" onAction="#handleCancelLogin" text="Cancel" />
+      <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <FlowPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Password" translateX="123.0" translateY="217.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Button mnemonicParsing="false" text="Login" translateX="337.0" translateY="274.0" />
+                  <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="Username" translateX="-8.0" translateY="163.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="25.0" prefWidth="348.0" translateX="-99.0" translateY="242.0" />
+                  <TextField prefHeight="25.0" prefWidth="348.0" translateX="121.0" translateY="157.0" />
+                  <Label text="Teacher Login" translateX="-135.0" translateY="15.0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Button mnemonicParsing="false" onAction="#handleCancelLogin" text="Cancel" translateX="-377.0" translateY="242.0" />
+               </children>
+            </FlowPane>
+         </center></BorderPane>
    </children>
 </AnchorPane>
