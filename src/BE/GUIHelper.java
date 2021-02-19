@@ -126,4 +126,37 @@ public class GUIHelper {
     }
         return null;
 }
+
+    public static void createPersonBorderPane(Person person) {
+        if (person != null) {
+            var pane = new BorderPane();
+
+            // Get the student's first and last name as well as picture path.
+            Text studentName = new Text(String.format("%s \n%s", person.getFirstName(), person.getLastName()));
+            studentName.setFont(AttendanceOverviewController.FONT);
+            ImageView picture = new ImageView(person.getPicture());
+            picture.setPreserveRatio(true);
+            picture.setFitWidth(AttendanceOverviewController.WIDTH);
+            picture.setFitHeight(AttendanceOverviewController.HEIGHT);
+
+            // Adjust to fit the BorderPane.
+            BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
+            BorderPane.setAlignment(picture, Pos.CENTER);
+
+            // Add the elements (nodes) to the BorderPane.
+            pane.setTop(studentName);
+            pane.setCenter(picture);
+
+            // Adding styling.
+            pane.setStyle(AttendanceOverviewController.DEFAULT_STYLE);
+            pane.setPadding(new Insets(8, 8, 8, 8));
+            FlowPane.setMargin(pane, new Insets(10, 10, 10, 10));
+
+            // Assign an id.
+            pane.setAccessibleText(String.format("%d", person.getId()));
+
+            // Assign the BorderPane to the student.
+            person.personPane = pane;
+        }
+    }
 }
