@@ -14,7 +14,7 @@ public class TeacherLoginController {
         Parent attendanceOverviewParent = FXMLLoader.load(getClass().getResource("/GUI/FXML/AttendanceOverview.fxml"));
         Scene attendanceOverviewScene = new Scene(attendanceOverviewParent);
         Stage teacherLogin = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        teacherLogin.hide();
+        //teacherLogin.hide();
         teacherLogin.setScene(attendanceOverviewScene);
         teacherLogin.show();
     }

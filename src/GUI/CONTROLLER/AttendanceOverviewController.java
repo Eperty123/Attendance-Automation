@@ -75,7 +75,7 @@ public class AttendanceOverviewController implements Initializable {
     protected ObservableList<Person> personList = FXCollections.observableArrayList(Arrays.asList());
 
     protected ObservableList<Teacher> teacherList = FXCollections.observableArrayList(Arrays.asList(
-            new Teacher(69,"Dancing", "Pepe","GUI/Pictures/tenor.gif"))
+            new Teacher(69, "Dancing", "Pepe", "/GUI/Pictures/strongPepe.jpg"))
     );
 
     /**
@@ -210,7 +210,7 @@ public class AttendanceOverviewController implements Initializable {
         if (student != null) {
             BorderPane pane = student.getStudentPane();
             if (student.getStudentPane() == null)
-                pane = GUIHelper.createStudentBorderPane(student, FONT, WIDTH, HEIGHT, DEFAULT_STYLE);
+                pane = GUIHelper.createPersonBorderPane(student);
 
             studentListFlowPane.getChildren().add(pane);
             return pane;
@@ -240,7 +240,7 @@ public class AttendanceOverviewController implements Initializable {
                                         // When the student id matches the accessible text (id), assign.
                                         if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText()) ||
                                                 Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
-                                                student.getAttendanceUtil().attend();
+                                            student.getAttendanceUtil().attend();
                                             sessionManager.setSelectedStudent(student);
                                             //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                                         }
