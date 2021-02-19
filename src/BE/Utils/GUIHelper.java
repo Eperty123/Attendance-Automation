@@ -47,6 +47,10 @@ public class GUIHelper {
         return null;
 }
 
+    /**
+     * Creates a borderpane for the person
+     * @param person
+     */
     public static void createPersonBorderPane(Person person) {
         if (person != null) {
             var pane = new BorderPane();
