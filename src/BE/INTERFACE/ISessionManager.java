@@ -1,6 +1,6 @@
 package BE.INTERFACE;
 
-import BE.Session;
+import BE.Utils.Session;
 import BE.Student;
 import GUI.Main;
 

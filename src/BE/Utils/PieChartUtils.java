@@ -1,15 +1,14 @@
-package BE;
+package BE.Utils;
 
+import BE.Student;
+import BE.Utils.AttendanceUtil;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
 
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -35,7 +34,7 @@ public class PieChartUtils {
                     i.incrementAndGet();
                 }
             });
-            pieChartData.add(new PieChart.Data(student.getFullName(), (double)(i.get()*100)/AttendanceUtil.dateSet.size()));
+            pieChartData.add(new PieChart.Data(student.getFullName(), (double)(i.get()*100)/ AttendanceUtil.dateSet.size()));
         }
 
         // Bind % value to the chart.

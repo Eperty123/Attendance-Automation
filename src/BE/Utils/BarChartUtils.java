@@ -1,5 +1,6 @@
-package BE;
+package BE.Utils;
 
+import BE.Student;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;

@@ -1,7 +1,7 @@
 package GUI.CONTROLLER;
 
-import BE.GUIHelper;
-import BE.PieChartUtils;
+import BE.Utils.GUIHelper;
+import BE.Utils.PieChartUtils;
 import BE.INTERFACE.ISessionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

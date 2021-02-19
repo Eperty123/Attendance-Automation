@@ -2,6 +2,8 @@ package GUI.CONTROLLER;
 
 import BE.*;
 import BE.INTERFACE.ISessionManager;
+import BE.Utils.GUIHelper;
+import BE.Utils.SessionManager;
 import GUI.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -29,7 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
 
 public class AttendanceOverviewController implements Initializable {
 
