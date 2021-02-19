@@ -59,7 +59,7 @@ public class StudentDashboardController implements Initializable {
             if (sessionManager.hasStudents()) {
                 Platform.runLater(() -> welcomeLbl.setText(String.format("Welcome, %s", getSelectedStudent().getFirstName())));
                 var lastAttendance = getSelectedStudent().getLastAttendance();
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy");
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy HH:mm:ss");
                 String formatDateTime = lastAttendance.format(format);
                 Platform.runLater(() -> lastAttendanceLbl.setText(String.format("Last Attendance: %s", formatDateTime)));
                 System.out.println(String.format("Selected student: %s (id: %d)", getSelectedStudent().getFullName(), getSelectedStudent().getId()));

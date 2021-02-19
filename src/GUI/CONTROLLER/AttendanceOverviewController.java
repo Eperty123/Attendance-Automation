@@ -24,7 +24,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -231,8 +230,10 @@ public class AttendanceOverviewController implements Initializable {
 
                                             // Make the student attend on click.
                                             // Check if the student has already registered for today, if not attend, otherwise don't do nothing.
-                                            if (DateUtility.isPast(LocalDate.now(), student.getLastAttendance().toLocalDate()))
+                                            if (!student.hasAttendedToday()) {
                                                 student.attend();
+                                                System.out.println(String.format("Student: %s attended at: %s", student.getFullName(), student.getLastAttendance()));
+                                            }
                                             sessionManager.setSelectedStudent(student);
                                             //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                                         }

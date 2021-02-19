@@ -4,6 +4,8 @@ import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -163,7 +165,7 @@ public class Student {
     /**
      *
      */
-    public int[] getWeekDaysAbsent(){
+    public int[] getWeekDaysAbsent() {
         int[] dayFreq = new int[5];
         absentDays.forEach(d -> {
                     if (d.getDayOfWeek().getValue() < 6)
@@ -176,7 +178,7 @@ public class Student {
     /**
      * returns a list of the absent days
      */
-    public List<LocalDate> getAbsentDays(){
+    public List<LocalDate> getAbsentDays() {
         return absentDays;
     }
 
@@ -246,12 +248,14 @@ public class Student {
     /**
      * Attends current date
      */
-    public void attend() {
-        daysAttended.add(LocalDateTime.now());
-        studentDateSet.add(LocalDate.now());
-        dateSet.add(LocalDate.now());
+    public LocalDateTime attend() {
+        var attended = LocalDateTime.now();
+        daysAttended.add(attended);
+        studentDateSet.add(attended.toLocalDate());
+        dateSet.add(attended.toLocalDate());
         absentDays = new ArrayList<>(Student.dateSet);
         absentDays.removeAll(this.studentDateSet);
+        return attended;
     }
 
     /**
@@ -288,5 +292,17 @@ public class Student {
      */
     public LocalDateTime getLastAttendance() {
         return getDaysAttended().get(getDaysAttended().size() - 1);
+    }
+
+    /**
+     * Has this student already attended and registered for today?
+     *
+     * @return Returns true if yes otherwise false.
+     * @throws ParseException
+     */
+    public boolean hasAttendedToday() {
+        var lastAttence = getLastAttendance();
+        var today = LocalDateTime.now();
+        return lastAttence.isAfter(today) || lastAttence.equals(today);
     }
 }
