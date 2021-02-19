@@ -4,8 +4,6 @@ import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;

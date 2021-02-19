@@ -6,24 +6,18 @@ import GUI.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -232,10 +226,6 @@ public class AttendanceOverviewController implements Initializable {
                                             // Check if the student has already registered for today, if not attend, otherwise don't do nothing.
                                             if (DateUtility.isPast(LocalDate.now(), student.getAttendanceUtil().getLastAttendance().toLocalDate()))
                                                 student.getAttendanceUtil().attend();
-                                            if (!student.hasAttendedToday()) {
-                                                student.attend();
-                                                System.out.println(String.format("Student: %s attended at: %s", student.getFullName(), student.getLastAttendance()));
-                                            }
                                             sessionManager.setSelectedStudent(student);
                                             //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                                         }
@@ -257,15 +247,5 @@ public class AttendanceOverviewController implements Initializable {
                     }
             );
         });
-    }
-
-    public void handleTeacherLogin(ActionEvent event) throws IOException {
-        Parent teacher_login_parent = FXMLLoader.load(getClass().getResource("/GUI/FXML/TeacherLogin.fxml"));
-        Scene teacher_login_scene = new Scene(teacher_login_parent);
-        Stage attendanceOverview = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        attendanceOverview.hide();
-        attendanceOverview.setScene(teacher_login_scene);
-        attendanceOverview.show();
-
     }
 }
