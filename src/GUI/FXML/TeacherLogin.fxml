@@ -25,5 +25,6 @@
          <font>
             <Font size="24.0" />
          </font></Label>
+      <Button layoutX="126.0" layoutY="279.0" mnemonicParsing="false" onAction="#handleCancelLogin" text="Cancel" />
    </children>
 </AnchorPane>
