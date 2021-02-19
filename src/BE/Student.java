@@ -192,16 +192,4 @@ public class Student {
     public int getTotalAbsence(){
         return attendanceUtil.getTotalAbsence();
     }
-
-    /**
-     * Has this student already attended and registered for today?
-     *
-     * @return Returns true if yes otherwise false.
-     * @throws ParseException
-     */
-    public boolean hasAttendedToday() {
-        var lastAttence = getLastAttendance();
-        var today = LocalDateTime.now();
-        return lastAttence.isAfter(today) || lastAttence.equals(today);
-    }
 }
