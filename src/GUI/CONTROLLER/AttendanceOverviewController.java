@@ -273,13 +273,11 @@ public class AttendanceOverviewController implements Initializable {
         if (!sessionManager.hasTeachers())
             sessionManager.setTeachers(teacherList);
         else {
-            System.out.println("Session has teachers!");
-        }
-
-        if (sessionManager.isTeacherLoggedIn()) {
-            // Get the session manager's current active teacher.
-            setCurrentTeacher(sessionManager.getLoggedInTeacher());
-            System.out.println(String.format("Teacher logged in: %s", currentTeacher.getFullName()));
+            if (sessionManager.isTeacherLoggedIn()) {
+                // Get the session manager's current active teacher.
+                setCurrentTeacher(sessionManager.getLoggedInTeacher());
+                System.out.println(String.format("Teacher logged in: %s", currentTeacher.getFullName()));
+            }
         }
 
         // If the session manager doesn't have an instance of AttendanceOverviewController,
