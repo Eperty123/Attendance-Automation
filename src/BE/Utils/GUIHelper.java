@@ -47,7 +47,7 @@ public class GUIHelper {
      * Creates a borderpane for the person
      * @param person
      */
-    public static void createPersonBorderPane(Person person) {
+    public static BorderPane createPersonBorderPane(Person person) {
         if (person != null) {
             var pane = new BorderPane();
 
@@ -77,6 +77,8 @@ public class GUIHelper {
 
             // Assign the BorderPane to the student.
             person.setPersonPane(pane);
+            return pane;
         }
+        return null;
     }
 }
