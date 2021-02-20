@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class TeacherLoginController {
+    public PasswordField passwordField;
     public TextField usernameField;
     public AttendanceOverviewController attendanceOverviewController;
 
@@ -35,3 +36,4 @@ public class TeacherLoginController {
 
     }
     }
+}

@@ -99,7 +99,7 @@ public class AttendanceOverviewController implements Initializable {
     protected ObservableList<Person> personList = FXCollections.observableArrayList(Arrays.asList());
 
     protected ObservableList<Teacher> teacherList = FXCollections.observableArrayList(Arrays.asList(
-            new Teacher(69, "Dancing", "Pepe", "/GUI/Pictures/strongPepe.jpg"))
+            new Teacher(69, "Dancing", "Pepe", "GUI/Pictures/strongPepe.jpg"))
     );
 
     /**
@@ -281,11 +281,11 @@ public class AttendanceOverviewController implements Initializable {
      * @param person The person to add.
      * @return The created BorderPane with the student in it.
      */
-    private BorderPane addToStudentListFlowPane(Student student) {
-        if (student != null) {
-            BorderPane pane = student.getStudentPane();
-            if (student.getStudentPane() == null)
-                pane = GUIHelper.createPersonBorderPane(student);
+    private BorderPane addToStudentListFlowPane(Person person) {
+        if (person != null) {
+            BorderPane pane = person.getPersonPane();
+            if (person.getPersonPane() == null)
+                GUIHelper.createPersonBorderPane(person);
 
             studentListFlowPane.getChildren().add(pane);
             return pane;
@@ -321,19 +321,8 @@ public class AttendanceOverviewController implements Initializable {
                             // On mouse left click.
                             if (e.getButton() == MouseButton.PRIMARY) {
                                 try {
-                                    // Assign the configuration's selected student to the selected one though the node.
-                                    sessionManager.getStudentList().forEach((student) -> {
 
-                                        // When the student id matches the accessible text (id), assign.
-                                        if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText()) ||
-                                                Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
-                                            student.getAttendanceUtil().attend();
-                                            sessionManager.setSelectedStudent(student);
-                                            //System.out.println(String.format("Assigned selected student: %s", student.getId()));
-                                        }
-                                    });
-
-                                    if (sessionManager.getSelectedStudent() != null) {
+                                    if (sessionManager.getSelectedStudent() != null && e.getClickCount() > 1) {
                                         System.out.println(String.format("Selected student id: %s", sessionManager.getSelectedStudent().getId()));
                                         var dashboardController = (StudentDashboardController) Main.getInstance().changeStage("FXML/StudentDashboard.fxml", "Student Dashboard");
                                         dashboardController.setSessionManager(sessionManager);
