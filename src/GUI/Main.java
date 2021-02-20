@@ -2,6 +2,7 @@ package GUI;
 
 import BE.INTERFACE.ISessionManager;
 import BE.Utils.SessionManager;
+import GUI.CONTROLLER.AttendanceOverviewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,7 +33,8 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/AttendanceOverview.fxml"));
         Parent root = loader.load();
-        //viewController = loader.getController();
+        AttendanceOverviewController viewController = loader.getController();
+        viewController.setMain(this);
 
         primaryStage.setTitle("Attendance Overview");
         primaryStage.setScene(new Scene(root));

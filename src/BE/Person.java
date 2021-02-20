@@ -6,6 +6,8 @@ import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
+import java.io.File;
+
 public class Person {
     protected LongProperty id = new SimpleLongProperty(0);
     protected StringProperty firstName = new SimpleStringProperty("");
@@ -122,7 +124,10 @@ public class Person {
      * @param picture
      */
     public void setPicture(String picture) {
+        File file = new File(picture);
+        if (file.exists()) {
         this.picture.set(new Image(picture));
+        }
     }
 
     /**

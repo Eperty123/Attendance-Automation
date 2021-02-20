@@ -5,6 +5,8 @@ import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
+import java.io.File;
+
 /**
  * The class responsible for defining Students.
  * Use GUIHelper to create GUI stuff from the Student class.
@@ -126,7 +128,10 @@ public class Student extends Person{
      */
     @Override
     public void setPicture(String picture) {
-        super.picture.set(new Image(picture));
+        File file = new File(picture);
+        if (file.exists()) {
+            super.picture.set(new Image(picture));
+        }
     }
 
     /**
