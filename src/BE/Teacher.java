@@ -9,9 +9,16 @@ import javafx.scene.layout.BorderPane;
 import java.io.File;
 
 public class Teacher extends Person {
-    public static final String password = "123";
+
+    protected TeacherLogin login;
+
     public Teacher(int id, String firstName, String lastName, String pictureUrl) {
-        super(id, firstName,lastName,pictureUrl);
+        super(id, firstName, lastName, pictureUrl);
+    }
+
+    public Teacher(int id, String firstName, String lastName, String pictureUrl, String username, String password) {
+        super(id, firstName, lastName, pictureUrl);
+        setLogin(username, password);
     }
 
     @Override
@@ -90,5 +97,28 @@ public class Teacher extends Person {
     @Override
     public ObjectProperty<Image> pictureProperty() {
         return super.pictureProperty();
+    }
+
+    /**
+     * Get the login for this teacher.
+     *
+     * @return
+     */
+    public TeacherLogin getLogin() {
+        return login;
+    }
+
+    /**
+     * Assign this teacher's login.
+     *
+     * @param login The login for this teacher.
+     */
+    public void setLogin(TeacherLogin login) {
+        this.login = login;
+    }
+
+    public void setLogin(String username, String password) {
+        if (!username.isBlank() && !password.isBlank())
+            login = new TeacherLogin(username, password);
     }
 }

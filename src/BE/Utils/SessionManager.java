@@ -2,6 +2,8 @@ package BE.Utils;
 
 import BE.INTERFACE.ISessionManager;
 import BE.Student;
+import BE.Teacher;
+import GUI.CONTROLLER.AttendanceOverviewController;
 import GUI.Main;
 
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.List;
 public class SessionManager implements ISessionManager {
     protected Session session;
     protected Main mainController;
+    protected AttendanceOverviewController attendanceOverviewController;
 
     protected static SessionManager instance;
 
@@ -94,12 +97,46 @@ public class SessionManager implements ISessionManager {
         }
     }
 
+    @Override
+    public boolean hasTeachers() {
+        return session.hasTeachers();
+    }
+
+    @Override
+    public List<Teacher> getTeachers() {
+        return session.getTeacherList();
+    }
+
+    @Override
+    public void setTeachers(List<Teacher> teachers) {
+        if (teachers != null)
+            session.setTeacherList(teachers);
+    }
+
+    @Override
+    public boolean isTeacherLoggedIn() {
+        return getLoggedInTeacher() != null;
+    }
+
+    @Override
+    public Teacher getLoggedInTeacher() {
+        return session.getLoggedInTeacher();
+    }
+
+    @Override
+    public void setLoggedInTeacher(Teacher teacher) {
+        session.setLoggedInTeacher(teacher);
+    }
+
     /**
      * Get or create a singleton instance of InstanceManager.
+     *
      * @return A singleton instance of InstanceManager.
      */
     public static SessionManager getInstance() {
-        if (instance == null) instance = new SessionManager();
+        if (instance == null) {
+            instance = new SessionManager();
+        }
         return instance;
     }
 
@@ -111,5 +148,25 @@ public class SessionManager implements ISessionManager {
     @Override
     public void setSessionManager(ISessionManager sessionManager) {
 
+    }
+
+    /**
+     * Get the instanced AttendanceOVerviewController.
+     *
+     * @return
+     */
+    @Override
+    public AttendanceOverviewController getAttendanceOVerviewController() {
+        return attendanceOverviewController;
+    }
+
+
+    @Override
+    /**
+     * Set the AttendanceOVerviewController.
+     * @param attendanceOverviewController The AttendanceOVerviewController to use.
+     */
+    public void setAttendanceOverviewController(AttendanceOverviewController attendanceOverviewController) {
+        this.attendanceOverviewController = attendanceOverviewController;
     }
 }

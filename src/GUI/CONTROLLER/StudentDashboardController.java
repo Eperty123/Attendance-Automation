@@ -1,7 +1,8 @@
 package GUI.CONTROLLER;
 
-import BE.Student;
 import BE.INTERFACE.ISessionManager;
+import BE.Student;
+import GUI.Main;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,11 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-import java.util.logging.SimpleFormatter;
 
 public class StudentDashboardController implements Initializable {
 
@@ -26,10 +24,11 @@ public class StudentDashboardController implements Initializable {
     @FXML
     public Text lastAttendanceLbl;
 
+    private Main main = Main.getInstance();
     /**
      * The ISessionManager for handling session data.
      */
-    protected ISessionManager sessionManager;
+    protected ISessionManager sessionManager = Main.getInstance().getSessionManager();
 
     /**
      * The AbsenceOverViewController.
@@ -39,17 +38,10 @@ public class StudentDashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        sessionManager = Main.getInstance().getSessionManager();
         updateDashboard();
     }
-
-    public ISessionManager getSessionManager() {
-        return sessionManager;
-    }
-
-    public void setSessionManager(ISessionManager sessionManager) {
-        this.sessionManager = sessionManager;
-    }
-
 
     /**
      * Update the student dashboard ui.
@@ -75,7 +67,7 @@ public class StudentDashboardController implements Initializable {
      */
     public void backToAttendanceOverview() throws Exception {
         try {
-            getSessionManager().getMainController().changeStage("FXML/AttendanceOverview.fxml", "Attendance Overview");
+            main.changeStage("FXML/AttendanceOverview.fxml", "Attendance Overview");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,9 +78,7 @@ public class StudentDashboardController implements Initializable {
      */
     public void showAttendanceStats() {
         try {
-            absenceOverviewController = getSessionManager().getMainController().changeStageInNewWindow("FXML/AbsenceOverview.fxml", "My Attendance Stats");
-            absenceOverviewController.setSessionManager(getSessionManager());
-            absenceOverviewController.updateChart();
+            absenceOverviewController = main.changeStageInNewWindow("FXML/AbsenceOverview.fxml", "My Attendance Stats");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,6 +91,6 @@ public class StudentDashboardController implements Initializable {
      * @return
      */
     public Student getSelectedStudent() {
-        return getSessionManager().getSelectedStudent();
+        return sessionManager.getSelectedStudent();
     }
 }
