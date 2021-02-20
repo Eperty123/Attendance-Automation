@@ -6,8 +6,10 @@ import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
+import java.io.File;
+
 public class Teacher extends Person {
-    private static final String password = "123";
+    public static final String password = "123";
     public Teacher(int id, String firstName, String lastName, String pictureUrl) {
         super(id, firstName,lastName,pictureUrl);
     }
@@ -59,7 +61,10 @@ public class Teacher extends Person {
 
     @Override
     public void setPicture(String picture) {
-        super.setPicture(picture);
+        File file = new File(picture);
+        if (file.exists()) {
+            super.picture.set(new Image(picture));
+        }
     }
 
     @Override

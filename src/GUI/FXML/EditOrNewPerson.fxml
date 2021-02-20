@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefWidth="200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.CONTROLLER.EditOrNewPersonController">
+   <children>
+      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <TilePane alignment="TOP_CENTER" prefColumns="2" prefHeight="200.0" prefRows="10" prefTileHeight="25.0" prefTileWidth="200.0" prefWidth="200.0">
+               <children>
+                  <Label text="StudentID" />
+                  <TextField fx:id="idField" />
+                  <Label text="First name" />
+                  <TextField fx:id="firstNameField" />
+                  <Label text="Last Name" />
+                  <TextField fx:id="lastNameField" />
+                  <Label text="Picture url" />
+                  <HBox>
+                     <children>
+                        <TextField fx:id="pictureUrlField" prefHeight="25.0" prefWidth="275.0" />
+                        <Button mnemonicParsing="false" onAction="#pickUrl" prefHeight="25.0" prefWidth="25.0" text="+" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#confirm" prefWidth="100.0" text="Confrim" />
+                        <Button mnemonicParsing="false" onAction="#cancel" prefWidth="100.0" text="Cancel" />
+                     </children>
+                  </HBox>
+               </children>
+            </TilePane>
+         </center>
+         <top>
+            <Label text="Create Student" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

@@ -3,8 +3,11 @@ package GUI.CONTROLLER;
 import BE.*;
 import BE.INTERFACE.ISessionManager;
 import BE.Utils.GUIHelper;
+import BE.Utils.MenuItemBit;
 import BE.Utils.SessionManager;
 import GUI.Main;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -13,17 +16,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -64,10 +67,31 @@ public class AttendanceOverviewController implements Initializable {
      * (using seed 1337 for testing)
      */
     Random random = new Random(1337);
+
+    private Scene oldScene;
+    private Main main;
+
+    public void setMain(Main main) {
+        this.main = main;
+    }
+
+    public Main getMain() {
+        return main;
+    }
+
+    private BooleanProperty isTeacher = new SimpleBooleanProperty(false);
+
+    public void setIsTeacher(boolean isTeacher) {
+        this.isTeacher.set(isTeacher);
+    }
+
     /**
      * The ISessionManager for handling session data.
      */
     protected ISessionManager sessionManager;
+
+    @FXML
+    private ContextMenu contextMenuPerson = new ContextMenu();
 
     /**
      * initializes the student list
@@ -75,7 +99,7 @@ public class AttendanceOverviewController implements Initializable {
     protected ObservableList<Person> personList = FXCollections.observableArrayList(Arrays.asList());
 
     protected ObservableList<Teacher> teacherList = FXCollections.observableArrayList(Arrays.asList(
-            new Teacher(69, "Dancing", "Pepe", "/GUI/Pictures/strongPepe.jpg"))
+            new Teacher(69, "Dancing", "Pepe", "GUI/Pictures/strongPepe.jpg"))
     );
 
     /**
@@ -97,6 +121,7 @@ public class AttendanceOverviewController implements Initializable {
         personList.addAll(teacherList);
         studentListFlowPane.getChildren().add(teacherList.get(0).getPersonPane());
         CRUDListeners();
+        initContextMenuPerson();
     }
 
     /**
@@ -136,15 +161,15 @@ public class AttendanceOverviewController implements Initializable {
                 //adds change listener
                 person.pictureProperty().addListener((observable, t1, t2) -> {
                     //Runs this code when the observable value changes
-                    int index = studentListFlowPane.getChildren().indexOf(person.getPersonPane());
-                    studentListFlowPane.getChildren().remove(person.getPersonPane());
-                    ImageView picture = new ImageView(person.getPicture());
-                    picture.setPreserveRatio(true);
-                    picture.setFitWidth(WIDTH);
-                    picture.setFitHeight(HEIGHT);
-                    BorderPane.setAlignment(picture, Pos.CENTER);
-                    person.getPersonPane().setCenter(picture);
-                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
+                        int index = studentListFlowPane.getChildren().indexOf(person.getPersonPane());
+                        studentListFlowPane.getChildren().remove(person.getPersonPane());
+                        ImageView picture = new ImageView(person.getPicture());
+                        picture.setPreserveRatio(true);
+                        picture.setFitWidth(WIDTH);
+                        picture.setFitHeight(HEIGHT);
+                        BorderPane.setAlignment(picture, Pos.CENTER);
+                        person.getPersonPane().setCenter(picture);
+                        studentListFlowPane.getChildren().add(index, person.getPersonPane());
                 }));
         //Loops through students
         personList.forEach(person -> person.idProperty().addListener((observable, t1, t2) -> {
@@ -167,6 +192,56 @@ public class AttendanceOverviewController implements Initializable {
                 studentListFlowPane.getChildren().add(person.getPersonPane());
             });
         });
+    }
+
+    private void initContextMenuPerson() {
+        List<MenuItem> menuItems = Arrays.asList(
+                new MenuItemBit("Attend", v -> attendDay()).getMenuItem()
+                , new SeparatorMenuItem()
+                , new MenuItemBit("New Person", v -> addStudent()).getMenuItem()
+                , new MenuItemBit("Edit Person", v -> editPerson()).getMenuItem()
+                , new MenuItemBit("Delete Person", v -> deletePerson()).getMenuItem()
+                , new SeparatorMenuItem());
+        menuItems.forEach(e -> contextMenuPerson.getItems().add(e));
+    }
+
+    private void deletePerson() {
+        personList.remove(sessionManager.getSession().getSelectedStudent());
+    }
+
+    private void editPerson() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/FXML/EditOrNewPerson.fxml"));
+            Parent editParent = loader.load();
+            EditOrNewPersonController controller = loader.getController();
+            Student student = sessionManager.getSelectedStudent();
+            controller.setStudent(student);
+            controller.setAttendanceOverviewController(this);
+            setOldScene(main.getActiveStage().getScene());
+            main.getActiveStage().setScene(new Scene(editParent));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void attendDay() {
+    }
+
+    private void addStudent() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/FXML/EditOrNewPerson.fxml"));
+            Parent editParent = loader.load();
+            EditOrNewPersonController controller = loader.getController();
+            controller.setAttendanceOverviewController(this);
+            setOldScene(main.getActiveStage().getScene());
+            main.getActiveStage().setScene(new Scene(editParent));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ObservableList<Person> getPersonList() {
+        return personList;
     }
 
     /**
@@ -203,14 +278,14 @@ public class AttendanceOverviewController implements Initializable {
     /**
      * Add a Student to the Student FlowPane.
      *
-     * @param student The student to add.
+     * @param person The person to add.
      * @return The created BorderPane with the student in it.
      */
-    private BorderPane addToStudentListFlowPane(Student student) {
-        if (student != null) {
-            BorderPane pane = student.getStudentPane();
-            if (student.getStudentPane() == null)
-                pane = GUIHelper.createPersonBorderPane(student);
+    private BorderPane addToStudentListFlowPane(Person person) {
+        if (person != null) {
+            BorderPane pane = person.getPersonPane();
+            if (person.getPersonPane() == null)
+                GUIHelper.createPersonBorderPane(person);
 
             studentListFlowPane.getChildren().add(pane);
             return pane;
@@ -231,22 +306,23 @@ public class AttendanceOverviewController implements Initializable {
                                 ^ studentNode.getAccessibleText().equals(selectedNode.getParent().getAccessibleText())) {
                             studentNode.setStyle(SELECTED_STYLE);
 
+                            // Assign the configuration's selected student to the selected one though the node.
+                            sessionManager.getStudentList().forEach((student) -> {
+
+                                // When the student id matches the accessible text (id), assign.
+                                if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText()) ||
+                                        Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
+                                    student.getAttendanceUtil().attend();
+                                    sessionManager.setSelectedStudent(student);
+                                    //System.out.println(String.format("Assigned selected student: %s", student.getId()));
+                                }
+                            });
+
                             // On mouse left click.
                             if (e.getButton() == MouseButton.PRIMARY) {
                                 try {
-                                    // Assign the configuration's selected student to the selected one though the node.
-                                    sessionManager.getStudentList().forEach((student) -> {
 
-                                        // When the student id matches the accessible text (id), assign.
-                                        if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText()) ||
-                                                Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
-                                            student.getAttendanceUtil().attend();
-                                            sessionManager.setSelectedStudent(student);
-                                            //System.out.println(String.format("Assigned selected student: %s", student.getId()));
-                                        }
-                                    });
-
-                                    if (sessionManager.getSelectedStudent() != null) {
+                                    if (sessionManager.getSelectedStudent() != null && e.getClickCount() > 1) {
                                         System.out.println(String.format("Selected student id: %s", sessionManager.getSelectedStudent().getId()));
                                         var dashboardController = (StudentDashboardController) Main.getInstance().changeStage("FXML/StudentDashboard.fxml", "Student Dashboard");
                                         dashboardController.setSessionManager(sessionManager);
@@ -258,19 +334,31 @@ public class AttendanceOverviewController implements Initializable {
                                     exception.printStackTrace();
                                 }
                             }
+
+                            if (e.getButton() == MouseButton.SECONDARY && isTeacher.get()) {
+                                if (isTeacher.get())
+                                    contextMenuPerson.show(studentListFlowPane, e.getScreenX(), e.getScreenY());
+                            }
                         } else studentNode.setStyle(DEFAULT_STYLE);
                     }
             );
         });
     }
 
-    public void handleTeacherLogin(ActionEvent event) throws IOException {
-        Parent teacher_login_parent = FXMLLoader.load(getClass().getResource("/GUI/FXML/TeacherLogin.fxml"));
-        Scene teacher_login_scene = new Scene(teacher_login_parent);
-        Stage attendanceOverview = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        attendanceOverview.hide();
-        attendanceOverview.setScene(teacher_login_scene);
-        attendanceOverview.show();
+    public Scene getOldScene() {
+        return oldScene;
+    }
 
+    public void setOldScene(Scene oldScene) {
+        this.oldScene = oldScene;
+    }
+
+    public void handleTeacherLogin(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/FXML/TeacherLogin.fxml"));
+        Parent teacher_login_parent = loader.load();
+        TeacherLoginController controller = loader.getController();
+        controller.setAttendanceOverviewController(this);
+        setOldScene(main.getActiveStage().getScene());
+        main.getActiveStage().setScene(new Scene(teacher_login_parent));
     }
 }
