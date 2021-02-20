@@ -15,7 +15,6 @@ import java.io.IOException;
 public class TeacherLoginController {
     public TextField usernameField;
     public AttendanceOverviewController attendanceOverviewController;
-    public PasswordField passwordField;
 
     public void setAttendanceOverviewController(AttendanceOverviewController attendanceOverviewController) {
         this.attendanceOverviewController = attendanceOverviewController;
@@ -36,4 +35,3 @@ public class TeacherLoginController {
 
     }
     }
-}
