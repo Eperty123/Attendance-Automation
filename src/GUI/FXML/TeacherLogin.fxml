@@ -26,8 +26,8 @@
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <TextField prefHeight="25.0" prefWidth="348.0" translateX="-99.0" translateY="242.0" />
-                  <TextField prefHeight="25.0" prefWidth="348.0" translateX="121.0" translateY="157.0" />
+                  <PasswordField fx:id="passwordField" prefHeight="25.0" prefWidth="348.0" translateX="-99.0" translateY="242.0" />
+                  <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="348.0" translateX="121.0" translateY="157.0" />
                   <Label text="Teacher Login" translateX="-135.0" translateY="15.0">
                      <font>
                         <Font size="24.0" />
