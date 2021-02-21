@@ -23,7 +23,7 @@ public class AttendanceUtility {
         daysAttended.add(LocalDateTime.now());
         studentDateSet.add(LocalDate.now());
         dateSet.add(LocalDate.now());
-        absentDays = FXCollections.observableArrayList(new ArrayList<>(AttendanceUtility.dateSet));
+        absentDays = new ArrayList<>(AttendanceUtility.dateSet);
         absentDays.removeAll(this.studentDateSet);
     }
 
@@ -36,7 +36,7 @@ public class AttendanceUtility {
         daysAttended.add(localDateTime);
         studentDateSet.add(localDateTime.toLocalDate());
         dateSet.add(localDateTime.toLocalDate());
-        absentDays = FXCollections.observableArrayList(new ArrayList<>(AttendanceUtility.dateSet));
+        absentDays = new ArrayList<>(AttendanceUtility.dateSet);
         absentDays.removeAll(this.studentDateSet);
     }
 
