@@ -1,7 +1,6 @@
 package BE.Utils;
 
 import BE.Student;
-import BE.Utils.AttendanceUtil;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Author: DennisPC-bit.
  */
 
-public class PieChartUtils {
+public class PieChartUtility {
     static List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 
     /**
@@ -34,7 +33,7 @@ public class PieChartUtils {
                     i.incrementAndGet();
                 }
             });
-            pieChartData.add(new PieChart.Data(student.getFullName(), (double)(i.get()*100)/ AttendanceUtil.dateSet.size()));
+            pieChartData.add(new PieChart.Data(student.getFullName(), (double)(i.get()*100)/ AttendanceUtility.dateSet.size()));
         }
 
         // Bind % value to the chart.
@@ -88,7 +87,7 @@ public class PieChartUtils {
     public static PieChart getStudentAbsencePieChart(List<Student> students){
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
         students.forEach(s->{
-        pieChartData.add(new PieChart.Data(s.getFullName(), (double)(s.getAttendanceUtil().getTotalAbsence()*100)/AttendanceUtil.dateSet.size()));
+        pieChartData.add(new PieChart.Data(s.getFullName(), (double)(s.getAttendanceUtil().getTotalAbsence()*100)/ AttendanceUtility.dateSet.size()));
         });
 
 

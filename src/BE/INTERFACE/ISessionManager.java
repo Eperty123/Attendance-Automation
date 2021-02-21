@@ -1,11 +1,11 @@
 package BE.INTERFACE;
 
-import BE.Teacher;
-import BE.TeacherLogin;
-import BE.Utils.Session;
 import BE.Student;
+import BE.Teacher;
+import BE.Utils.Session;
 import GUI.CONTROLLER.AttendanceOverviewController;
 import GUI.Main;
+import javafx.stage.Stage;
 
 import java.util.List;
 
@@ -122,4 +122,10 @@ public interface ISessionManager {
      * @param teacher The teacher to set as logged in.
      */
     void setLoggedInTeacher(Teacher teacher);
+
+    /**
+     * Get the current active stage.
+     * @return The active stage.
+     */
+    Stage getActiveStage();
 }

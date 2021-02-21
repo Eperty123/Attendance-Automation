@@ -6,6 +6,7 @@ import BE.Student;
 import BE.Teacher;
 import BE.Utils.GUIHelper;
 import BE.Utils.MenuItemBit;
+import BE.Utils.SessionManager;
 import GUI.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -28,10 +29,7 @@ import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AttendanceOverviewController implements Initializable {
 
@@ -67,14 +65,14 @@ public class AttendanceOverviewController implements Initializable {
     Random random = new Random(1337);
 
     /**
-     * The main controller. It must be the singleton instance or shit goes down!
-     */
-    private Main main = Main.getInstance();
-
-    /**
      * The session manager responsible for everything. Must get from the main singleton.
      */
-    protected ISessionManager sessionManager = main.getSessionManager();
+    protected ISessionManager sessionManager = SessionManager.getInstance();
+
+    /**
+     * The main controller. It must be the singleton instance or shit goes down!
+     */
+    private Main main = sessionManager.getMainController();
 
     /**
      * The current logged in teacher.
@@ -255,19 +253,8 @@ public class AttendanceOverviewController implements Initializable {
      */
     private void applySessionSettings() {
 
-        studentListFlowPane.getChildren().clear();
-
-        // If no students are present in the session manager, create and add them.
-        if (!sessionManager.hasStudents())
-            sessionManager.setStudentList(createStudents());
-        else {
-            // Otherwise use the ones from the session manager.
-            var previousStudents = sessionManager.getStudentList();
-            for (int i = 0; i < previousStudents.size(); i++) {
-                var previousStudent = previousStudents.get(i);
-                addToStudentListFlowPane(previousStudent);
-            }
-        }
+        // Clear the StudentPane for a clean start.
+        clearStudentPane();
 
         // If no teachers are present in the session manager, add the mock data.
         if (!sessionManager.hasTeachers())
@@ -276,8 +263,28 @@ public class AttendanceOverviewController implements Initializable {
             if (sessionManager.isTeacherLoggedIn()) {
                 // Get the session manager's current active teacher.
                 setCurrentTeacher(sessionManager.getLoggedInTeacher());
-                System.out.println(String.format("Teacher logged in: %s", currentTeacher.getFullName()));
             }
+        }
+
+        // If no students are present in the session manager, create and add them.
+        if (!sessionManager.hasStudents())
+            sessionManager.setStudentList(createStudents());
+        else {
+            studentList.clear();
+            studentList.addAll(sessionManager.getStudentList());
+        }
+
+        // Otherwise use the ones from the session manager.
+
+        // If a teacher is logged in, sort the students by who's the most absence percentage.
+        if (sessionManager.isTeacherLoggedIn()) {
+            studentList.sort(Comparator.comparing(o -> o.getAttendanceUtil().getAbsencePercentage(), Comparator.reverseOrder()));
+        }
+
+        // List the students.
+        for (int i = 0; i < studentList.size(); i++) {
+            var student = studentList.get(i);
+            student.setStudentPane(addToStudentListFlowPane(student));
         }
 
         // If the session manager doesn't have an instance of AttendanceOverviewController,
@@ -285,14 +292,23 @@ public class AttendanceOverviewController implements Initializable {
         if (sessionManager.getAttendanceOVerviewController() == null)
             sessionManager.setAttendanceOverviewController(this);
 
-        selectStudent();
         personList.addAll(studentList);
         personList.addAll(teacherList);
+        selectStudent();
         //studentListFlowPane.getChildren().add(teacherList.get(0).getPersonPane());
         CRUDListeners();
         initContextMenuPerson();
 
         System.out.println(String.format("Students count: %d", sessionManager.getStudentList().size()));
+    }
+
+    /**
+     * Empty the StudentFlowPane for existing students.
+     */
+    private void clearStudentPane() {
+        // Clear the student FlowPane for a clean start.
+        studentListFlowPane.getChildren().clear();
+        //studentList.clear();
     }
 
     /**
@@ -304,7 +320,7 @@ public class AttendanceOverviewController implements Initializable {
         studentList.forEach(s -> {
             for (int i = 0; i < 10; i++)
                 s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(10)));
-            s.setStudentPane(addToStudentListFlowPane(s));
+            //s.setStudentPane(addToStudentListFlowPane(s));
             s.setFirstName(s.getFirstName());
         });
         return studentList;
@@ -347,7 +363,11 @@ public class AttendanceOverviewController implements Initializable {
                         // When the student id matches the accessible text (id), assign.
                         if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText()) ||
                                 Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
-                            student.getAttendanceUtil().attend();
+
+                            // Attend student if not a teacher.
+                            if (!sessionManager.isTeacherLoggedIn())
+                                student.getAttendanceUtil().attend();
+
                             sessionManager.setSelectedStudent(student);
                             //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                         }
@@ -371,7 +391,7 @@ public class AttendanceOverviewController implements Initializable {
 
                                 if (sessionManager.getSelectedStudent() != null) {
                                     System.out.println(String.format("Selected student id: %s", sessionManager.getSelectedStudent().getId()));
-                                    var dashboardController = (StudentDashboardController) Main.getInstance().changeStage("FXML/StudentDashboard.fxml", "Student Dashboard");
+                                    var dashboardController = (StudentDashboardController) sessionManager.getMainController().changeStage("FXML/StudentDashboard.fxml", "Student Dashboard");
                                     dashboardController.updateDashboard();
 
                                 }
@@ -396,6 +416,10 @@ public class AttendanceOverviewController implements Initializable {
     public void handleTeacherLogin() {
         try {
             main.changeStage("/GUI/FXML/TeacherLogin.fxml", "Teacher Login");
+
+            // Update the session manager's student list
+            // to ensure everything's up to date on load.
+            sessionManager.setStudentList(studentList);
         } catch (Exception e) {
             e.printStackTrace();
         }

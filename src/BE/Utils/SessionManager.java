@@ -5,6 +5,7 @@ import BE.Student;
 import BE.Teacher;
 import GUI.CONTROLLER.AttendanceOverviewController;
 import GUI.Main;
+import javafx.stage.Stage;
 
 import java.util.List;
 
@@ -126,6 +127,11 @@ public class SessionManager implements ISessionManager {
     @Override
     public void setLoggedInTeacher(Teacher teacher) {
         session.setLoggedInTeacher(teacher);
+    }
+
+    @Override
+    public Stage getActiveStage() {
+        return getMainController().getActiveStage();
     }
 
     /**

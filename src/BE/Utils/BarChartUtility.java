@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Author DennisPC-bit
  */
 
-public class BarChartUtils {
+public class BarChartUtility {
     static List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
 
     /**

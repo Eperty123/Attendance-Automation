@@ -2,6 +2,7 @@ package GUI.CONTROLLER;
 
 import BE.INTERFACE.ISessionManager;
 import BE.Teacher;
+import BE.Utils.SessionManager;
 import GUI.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
@@ -16,15 +17,16 @@ public class TeacherLoginController {
     @FXML
     public TextField usernameField;
 
-    protected Main main = Main.getInstance();
-    protected ISessionManager sessionManager = main.getSessionManager();
+    protected ISessionManager sessionManager = SessionManager.getInstance();
+    protected Main main = sessionManager.getMainController();
 
     /**
      * Handle the event for canceling log in.
      */
     public void handleCancelLogin() {
         try {
-            main.changeStage("/GUI/FXML/AttendanceOverview.fxml", "Attendance OVerview");
+            var properTitle = sessionManager.isTeacherLoggedIn() ? String.format("Attendance Overview (Teacher: %s)", sessionManager.getLoggedInTeacher().getFullName()) : "Attendance Overview";
+            main.changeStage("/GUI/FXML/AttendanceOverview.fxml", properTitle);
         } catch (Exception e) {
             e.printStackTrace();
         }

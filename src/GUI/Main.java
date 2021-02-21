@@ -34,10 +34,15 @@ public class Main extends Application {
         return instance;
     }
 
+    private void initialize() {
+        instance = this;
+        sessionManager.setMainController(getInstance());
+    }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        instance = this;
+        initialize();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/AttendanceOverview.fxml"));
         Parent root = loader.load();

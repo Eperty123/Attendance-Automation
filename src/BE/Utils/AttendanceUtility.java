@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class AttendanceUtil {
+public class AttendanceUtility {
     static List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
     protected List<LocalDateTime> daysAttended = new ArrayList<>();
     protected List<LocalDate> absentDays = new ArrayList<>();
@@ -18,9 +18,10 @@ public class AttendanceUtil {
         daysAttended.add(LocalDateTime.now());
         studentDateSet.add(LocalDate.now());
         dateSet.add(LocalDate.now());
-        absentDays = new ArrayList<>(AttendanceUtil.dateSet);
+        absentDays = new ArrayList<>(AttendanceUtility.dateSet);
         absentDays.removeAll(this.studentDateSet);
     }
+
     /**
      * Attends a specific date.
      *
@@ -30,7 +31,7 @@ public class AttendanceUtil {
         daysAttended.add(localDateTime);
         studentDateSet.add(localDateTime.toLocalDate());
         dateSet.add(localDateTime.toLocalDate());
-        absentDays = new ArrayList<>(AttendanceUtil.dateSet);
+        absentDays = new ArrayList<>(AttendanceUtility.dateSet);
         absentDays.removeAll(this.studentDateSet);
     }
 
@@ -69,10 +70,11 @@ public class AttendanceUtil {
 
     /**
      * Gets the absence percentage as a percentage of days where at least one student attended
+     *
      * @return A percentage of total attendance
      */
     public double getAbsencePercentage() {
-        return (double) (absentDays.size() * 100) / AttendanceUtil.dateSet.size();
+        return (double) (absentDays.size() * 100) / AttendanceUtility.dateSet.size();
     }
 
     /**
@@ -87,7 +89,7 @@ public class AttendanceUtil {
                         dayFreq[d.getDayOfWeek().getValue() - 1] += 1;
                 }
         );
-        return Arrays.stream(dayFreq).max().isPresent()?days.get(Arrays.stream(dayFreq).max().getAsInt()):"none";
+        return Arrays.stream(dayFreq).max().isPresent() ? days.get(Arrays.stream(dayFreq).max().getAsInt()) : "none";
     }
 
     /**
@@ -101,9 +103,10 @@ public class AttendanceUtil {
 
     /**
      * Get the students absence each day, where day[i] = the absence of day i
+     *
      * @return a array of frequencies
      */
-    public int[] getWeekDaysAbsent(){
+    public int[] getWeekDaysAbsent() {
         int[] dayFreq = new int[5];
         absentDays.forEach(d -> {
                     if (d.getDayOfWeek().getValue() < 6)
@@ -115,12 +118,12 @@ public class AttendanceUtil {
 
     /**
      * gets the list of absent days
+     *
      * @return a list of the absent days
      */
-    public List<LocalDate> getAbsentDays(){
+    public List<LocalDate> getAbsentDays() {
         return absentDays;
     }
-
 
 
     /**
