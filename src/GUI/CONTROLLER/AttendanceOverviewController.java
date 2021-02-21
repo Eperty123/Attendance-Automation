@@ -100,7 +100,7 @@ public class AttendanceOverviewController implements Initializable {
     protected ObservableList<Student> studentList = FXCollections.observableArrayList(Arrays.asList(
             new Student(0, "Shawn", "Mendes", "/GUI/Pictures/shawnmendes.png"),
             new Student(1, "Justin", "Bieber", "/GUI/Pictures/justinbieber.png"),
-            new Student(2, "Adam", "Lavine", "/GUI/Pictures/adamlavine.png")));
+            new Student(2, "Adam", "Levine", "/GUI/Pictures/adamlevine.png")));
 
     @FXML
     public FlowPane studentListFlowPane;
