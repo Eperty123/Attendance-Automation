@@ -1,6 +1,6 @@
 package BE;
 
-import BE.Utils.AttendanceUtil;
+import BE.Utils.AttendanceUtility;
 import BE.Utils.GUIHelper;
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
@@ -14,10 +14,10 @@ public class Person {
     protected StringProperty lastName = new SimpleStringProperty("");
     protected ObjectProperty<Image> picture = new SimpleObjectProperty<Image>(new Image("/GUI/Pictures/noIMG.png"));
     protected BorderPane personPane;
-    protected AttendanceUtil attendanceUtil;
+    protected AttendanceUtility attendanceUtility;
 
     public Person() {
-        attendanceUtil = new AttendanceUtil();
+        attendanceUtility = new AttendanceUtility();
     }
 
     public Person(int id, String firstName) {

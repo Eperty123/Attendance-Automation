@@ -2,6 +2,7 @@ package GUI.CONTROLLER;
 
 import BE.INTERFACE.ISessionManager;
 import BE.Student;
+import BE.Utils.SessionManager;
 import GUI.Main;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -24,11 +25,12 @@ public class StudentDashboardController implements Initializable {
     @FXML
     public Text lastAttendanceLbl;
 
-    private Main main = Main.getInstance();
     /**
      * The ISessionManager for handling session data.
      */
-    protected ISessionManager sessionManager = Main.getInstance().getSessionManager();
+    protected ISessionManager sessionManager = SessionManager.getInstance();
+
+    private Main main = sessionManager.getMainController();
 
     /**
      * The AbsenceOverViewController.
@@ -38,8 +40,6 @@ public class StudentDashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        sessionManager = Main.getInstance().getSessionManager();
         updateDashboard();
     }
 
@@ -67,7 +67,8 @@ public class StudentDashboardController implements Initializable {
      */
     public void backToAttendanceOverview() throws Exception {
         try {
-            main.changeStage("FXML/AttendanceOverview.fxml", "Attendance Overview");
+            var properTitle = sessionManager.isTeacherLoggedIn() ? String.format("Attendance Overview (Teacher: %s)", sessionManager.getLoggedInTeacher().getFullName()) : "Attendance Overview";
+            main.changeStage("FXML/AttendanceOverview.fxml", properTitle);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,7 +79,8 @@ public class StudentDashboardController implements Initializable {
      */
     public void showAttendanceStats() {
         try {
-            absenceOverviewController = main.changeStageInNewWindow("FXML/AbsenceOverview.fxml", "My Attendance Stats");
+            var properTitle = sessionManager.isTeacherLoggedIn() ? String.format("%s's Attendance Stats", getSelectedStudent().getFullName()) : "My Attendance Stats";
+            absenceOverviewController = main.changeStageInNewWindow("FXML/AbsenceOverview.fxml", properTitle);
         } catch (Exception e) {
             e.printStackTrace();
         }

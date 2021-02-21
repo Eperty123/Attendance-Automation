@@ -1,6 +1,6 @@
 package BE;
 
-import BE.Utils.AttendanceUtil;
+import BE.Utils.AttendanceUtility;
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -13,22 +13,26 @@ import java.io.File;
  */
 public class Student extends Person{
     protected BorderPane studentPane;
-    protected final AttendanceUtil attendanceUtil = new AttendanceUtil();
+    protected AttendanceUtility attendanceUtility;
 
     public Student() {
         super();
+        attendanceUtility = new AttendanceUtility();
     }
 
     public Student(int id, String firstName) {
         super(id,firstName);
+        attendanceUtility = new AttendanceUtility();
     }
 
     public Student(int id, String firstName, String lastName) {
         super(id,firstName,lastName);
+        attendanceUtility = new AttendanceUtility();
     }
 
     public Student(int id, String firstName, String lastName, String pictureUrl) {
         super(id,firstName,lastName,pictureUrl);
+        attendanceUtility = new AttendanceUtility();
     }
 
     /**
@@ -178,8 +182,8 @@ public class Student extends Person{
         return super.picture;
     }
 
-    public AttendanceUtil getAttendanceUtil() {
-        return attendanceUtil;
+    public AttendanceUtility getAttendanceUtil() {
+        return attendanceUtility;
     }
 
     /**
@@ -187,6 +191,6 @@ public class Student extends Person{
      * @return the total absence
      */
     public int getTotalAbsence(){
-        return attendanceUtil.getTotalAbsence();
+        return attendanceUtility.getTotalAbsence();
     }
 }

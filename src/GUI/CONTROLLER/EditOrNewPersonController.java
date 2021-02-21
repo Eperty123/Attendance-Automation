@@ -1,6 +1,7 @@
 package GUI.CONTROLLER;
 
 import BE.Student;
+import BE.Utils.SessionManager;
 import GUI.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -20,7 +21,7 @@ public class EditOrNewPersonController {
     private TextField pictureUrlField;
     private Student student;
 
-    private Main main = Main.getInstance();
+    private Main main = SessionManager.getInstance().getMainController();
 
     public AttendanceOverviewController attendanceOverviewController = main.getSessionManager().getAttendanceOVerviewController();
     
@@ -77,7 +78,7 @@ public class EditOrNewPersonController {
     public void pickUrl() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("./src/gui/pictures"));
-        File file = fileChooser.showOpenDialog(Main.getInstance().getActiveStage());
+        File file = fileChooser.showOpenDialog(main.getActiveStage());
         try {
             pictureUrlField.setText("file:/" + file.getCanonicalPath());
         } catch (IOException e) {
