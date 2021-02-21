@@ -4,8 +4,10 @@ import BE.INTERFACE.ISessionManager;
 import BE.Person;
 import BE.Student;
 import BE.Teacher;
+import BE.Utils.BarChartUtils;
 import BE.Utils.GUIHelper;
 import BE.Utils.MenuItemBit;
+import BE.Utils.PieChartUtils;
 import GUI.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -16,15 +18,19 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -192,8 +198,24 @@ public class AttendanceOverviewController implements Initializable {
                 , new MenuItemBit("New Person", v -> addStudent()).getMenuItem()
                 , new MenuItemBit("Edit Person", v -> editPerson()).getMenuItem()
                 , new MenuItemBit("Delete Person", v -> deletePerson()).getMenuItem()
-                , new SeparatorMenuItem());
+                , new SeparatorMenuItem()
+                , new MenuItemBit("show student's absence",v->{
+                    Scene scene = new Scene(new BorderPane(PieChartUtils.getStudentAbsencePieChart(sessionManager.getSelectedStudent())));
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.show();
+        }).getMenuItem()
+        , new MenuItemBit("Get total absence barchart",v->{ // this should work dunno why it stopped working
+                    Scene scene = new Scene(new BorderPane(BarChartUtils.getTotalIndividualAbsenceBarChart(studentList)));
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.show();
+                }).getMenuItem());
         menuItems.forEach(e -> contextMenuPerson.getItems().add(e));
+    }
+
+    public ObservableList<Student> getStudentList() {
+        return studentList;
     }
 
     /**
@@ -303,7 +325,7 @@ public class AttendanceOverviewController implements Initializable {
     public List<Student> createStudents() {
         studentList.forEach(s -> {
             for (int i = 0; i < 10; i++)
-                s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(10)));
+                s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(100)));
             s.setStudentPane(addToStudentListFlowPane(s));
             s.setFirstName(s.getFirstName());
         });

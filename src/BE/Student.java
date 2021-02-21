@@ -13,26 +13,22 @@ import java.io.File;
  */
 public class Student extends Person{
     protected BorderPane studentPane;
-    protected AttendanceUtil attendanceUtil;
+    protected final AttendanceUtil attendanceUtil = new AttendanceUtil();
 
     public Student() {
         super();
-        attendanceUtil = new AttendanceUtil();
     }
 
     public Student(int id, String firstName) {
         super(id,firstName);
-        attendanceUtil = new AttendanceUtil();
     }
 
     public Student(int id, String firstName, String lastName) {
         super(id,firstName,lastName);
-        attendanceUtil = new AttendanceUtil();
     }
 
     public Student(int id, String firstName, String lastName, String pictureUrl) {
         super(id,firstName,lastName,pictureUrl);
-        attendanceUtil = new AttendanceUtil();
     }
 
     /**

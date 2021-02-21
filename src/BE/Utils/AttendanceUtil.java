@@ -1,15 +1,20 @@
 package BE.Utils;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+import javafx.fxml.FXMLLoader;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class AttendanceUtil {
     static List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
-    protected List<LocalDateTime> daysAttended = new ArrayList<>();
-    protected List<LocalDate> absentDays = new ArrayList<>();
-    protected static Set<LocalDate> dateSet = new HashSet<LocalDate>();
-    protected Set<LocalDate> studentDateSet = new HashSet<LocalDate>();
+    protected ObservableList<LocalDateTime> daysAttended = FXCollections.observableArrayList(new ArrayList<>());
+    protected ObservableList<LocalDate> absentDays = FXCollections.observableArrayList(new ArrayList<>());
+    protected static ObservableSet<LocalDate> dateSet = FXCollections.observableSet(new HashSet<LocalDate>());
+    protected ObservableSet<LocalDate> studentDateSet = FXCollections.observableSet(new HashSet<LocalDate>());
 
     /**
      * Attends current date
@@ -18,8 +23,8 @@ public class AttendanceUtil {
         daysAttended.add(LocalDateTime.now());
         studentDateSet.add(LocalDate.now());
         dateSet.add(LocalDate.now());
-        absentDays = new ArrayList<>(AttendanceUtil.dateSet);
-        absentDays.removeAll(this.studentDateSet);
+        this.absentDays = FXCollections.observableArrayList(AttendanceUtil.dateSet);
+        this.absentDays.removeAll(this.studentDateSet);
     }
     /**
      * Attends a specific date.
@@ -30,8 +35,8 @@ public class AttendanceUtil {
         daysAttended.add(localDateTime);
         studentDateSet.add(localDateTime.toLocalDate());
         dateSet.add(localDateTime.toLocalDate());
-        absentDays = new ArrayList<>(AttendanceUtil.dateSet);
-        absentDays.removeAll(this.studentDateSet);
+        this.absentDays = FXCollections.observableArrayList(AttendanceUtil.dateSet);
+        this.absentDays.removeAll(this.studentDateSet);
     }
 
     /**
@@ -39,7 +44,7 @@ public class AttendanceUtil {
      *
      * @return the days attended.
      */
-    public List<LocalDateTime> getDaysAttended() {
+    public ObservableList<LocalDateTime> getDaysAttended() {
         return daysAttended;
     }
 
@@ -48,7 +53,7 @@ public class AttendanceUtil {
      *
      * @return a set of days
      */
-    public Set<LocalDate> getDaysWithAtleastOneAttend() {
+    public ObservableSet<LocalDate> getDaysWithAtleastOneAttend() {
         return dateSet;
     }
 
@@ -117,7 +122,7 @@ public class AttendanceUtil {
      * gets the list of absent days
      * @return a list of the absent days
      */
-    public List<LocalDate> getAbsentDays(){
+    public ObservableList<LocalDate> getAbsentDays(){
         return absentDays;
     }
 
