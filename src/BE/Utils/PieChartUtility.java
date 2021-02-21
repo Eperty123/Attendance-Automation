@@ -79,6 +79,25 @@ public class PieChartUtility {
         return pieChart;
     }
 
+    public static PieChart getStudentAbsencePieChart(Student student){
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        for(int i = 0; i<5;i++)
+        pieChartData.add(new PieChart.Data(days.get(i), (double)(student.getAttendanceUtil().getWeekDaysAbsent()[i]*100)/Arrays.stream(student.getAttendanceUtil().getWeekDaysAbsent()).sum()));
+
+        // Bind % value to the chart.
+        pieChartData.forEach(data ->
+                data.nameProperty().bind(
+                        Bindings.concat(
+                                data.getName(), " ", String.format("%.02f",data.pieValueProperty().getValue()), " %"
+                        )
+                )
+        );
+
+        PieChart pieChart = new PieChart(pieChartData);
+        pieChart.setTitle("Total absence % per day");
+        return pieChart;
+    }
+
     /**
      * Returns a piechart og the students' absence
      * @param students the students you want to examine

@@ -26,10 +26,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import BE.Utils.PieChartUtility;
 
 public class AttendanceOverviewController implements Initializable {
 
@@ -125,7 +128,7 @@ public class AttendanceOverviewController implements Initializable {
                     studentName.setFont(FONT);
                     BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
                     person.getPersonPane().setTop(studentName);
-                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
+                    studentListFlowPane.getChildren().add(Math.max(index, 0), person.getPersonPane());
                 }));
 
         //Loops through students
@@ -139,7 +142,7 @@ public class AttendanceOverviewController implements Initializable {
                     studentName.setFont(FONT);
                     BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
                     person.getPersonPane().setTop(studentName);
-                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
+                    studentListFlowPane.getChildren().add(Math.max(index, 0), person.getPersonPane());
                 }));
 
         //Loops through students
@@ -155,7 +158,7 @@ public class AttendanceOverviewController implements Initializable {
                     picture.setFitHeight(HEIGHT);
                     BorderPane.setAlignment(picture, Pos.CENTER);
                     person.getPersonPane().setCenter(picture);
-                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
+                    studentListFlowPane.getChildren().add(Math.max(index, 0), person.getPersonPane());
                 }));
         //Loops through students
         personList.forEach(person -> person.idProperty().addListener((observable, t1, t2) -> {
@@ -163,7 +166,7 @@ public class AttendanceOverviewController implements Initializable {
             studentListFlowPane.getChildren().remove(person.getPersonPane());
             person.getPersonPane().setAccessibleText(String.format("%d", t2));
             person.getPersonPane().getChildren().forEach(c -> c.setAccessibleText(String.format("%d", t2)));
-            studentListFlowPane.getChildren().add(index, person.getPersonPane());
+            studentListFlowPane.getChildren().add(Math.max(index, 0), person.getPersonPane());
         }));
 
         //listens for changes in the studentlist and removes/adds the studentpanes accordingly
@@ -190,8 +193,18 @@ public class AttendanceOverviewController implements Initializable {
                 , new MenuItemBit("New Person", v -> addStudent()).getMenuItem()
                 , new MenuItemBit("Edit Person", v -> editPerson()).getMenuItem()
                 , new MenuItemBit("Delete Person", v -> deletePerson()).getMenuItem()
-                , new SeparatorMenuItem());
+                , new SeparatorMenuItem()
+                , new MenuItemBit("show student's absence", v -> {
+                    Scene scene = new Scene(new BorderPane(PieChartUtility.getStudentAbsencePieChart(sessionManager.getSelectedStudent())));
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.show();
+                }).getMenuItem());
         menuItems.forEach(e -> contextMenuPerson.getItems().add(e));
+    }
+
+    public ObservableList<Student> getStudentList() {
+        return studentList;
     }
 
     /**
