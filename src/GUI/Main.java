@@ -46,7 +46,6 @@ public class Main extends Application {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/AttendanceOverview.fxml"));
         Parent root = loader.load();
-        loader.getController();
         primaryStage.setTitle("Attendance Overview");
         primaryStage.setScene(new Scene(root));
 
@@ -153,4 +152,5 @@ public class Main extends Application {
     public ISessionManager getSessionManager() {
         return sessionManager;
     }
+
 }

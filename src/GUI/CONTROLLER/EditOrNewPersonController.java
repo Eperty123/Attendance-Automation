@@ -56,7 +56,7 @@ public class EditOrNewPersonController {
     public void confirm() {
         if (!idField.getText().isEmpty() && !firstNameField.getText().isEmpty() && !lastNameField.getText().isEmpty() && !pictureUrlField.getText().isEmpty()) {
             if (student == null) {
-                attendanceOverviewController.getPersonList().add(new Student(Integer.parseInt(idField.getText()), firstNameField.getText(), lastNameField.getText(), pictureUrlField.getText()));
+                attendanceOverviewController.getStudentList().add(new Student(Integer.parseInt(idField.getText()), firstNameField.getText(), lastNameField.getText(), pictureUrlField.getText()));
             } else {
                 if (this.student.getId() != Long.parseLong(idField.getText()))
                     this.student.setId(Long.parseLong(idField.getText()));
@@ -67,12 +67,22 @@ public class EditOrNewPersonController {
                 if (!this.student.getPicture().getUrl().equals(pictureUrlField.getText()))
                     this.student.setPicture(pictureUrlField.getText());
             }
-            //attendanceOverviewController.getMain().getActiveStage().setScene(attendanceOverviewController.getOldScene());
+
+            try {
+                main.changeStage("FXML/AttendanceOverview.fxml","");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void cancel() {
-        //attendanceOverviewController.getMain().getActiveStage().setScene(attendanceOverviewController.getOldScene());
+
+        try {
+            main.changeStage("FXML/AttendanceOverview.fxml","");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void pickUrl() {

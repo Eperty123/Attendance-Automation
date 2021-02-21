@@ -4,10 +4,8 @@ import BE.INTERFACE.ISessionManager;
 import BE.Person;
 import BE.Student;
 import BE.Teacher;
-import BE.Utils.BarChartUtils;
 import BE.Utils.GUIHelper;
 import BE.Utils.MenuItemBit;
-import BE.Utils.PieChartUtils;
 import BE.Utils.SessionManager;
 import GUI.Main;
 import javafx.collections.FXCollections;
@@ -19,16 +17,13 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -36,6 +31,8 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import BE.Utils.PieChartUtility;
 
 public class AttendanceOverviewController implements Initializable {
 
@@ -131,7 +128,7 @@ public class AttendanceOverviewController implements Initializable {
                     studentName.setFont(FONT);
                     BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
                     person.getPersonPane().setTop(studentName);
-                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
+                    studentListFlowPane.getChildren().add(Math.max(index, 0), person.getPersonPane());
                 }));
 
         //Loops through students
@@ -145,7 +142,7 @@ public class AttendanceOverviewController implements Initializable {
                     studentName.setFont(FONT);
                     BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
                     person.getPersonPane().setTop(studentName);
-                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
+                    studentListFlowPane.getChildren().add(Math.max(index, 0), person.getPersonPane());
                 }));
 
         //Loops through students
@@ -161,7 +158,7 @@ public class AttendanceOverviewController implements Initializable {
                     picture.setFitHeight(HEIGHT);
                     BorderPane.setAlignment(picture, Pos.CENTER);
                     person.getPersonPane().setCenter(picture);
-                    studentListFlowPane.getChildren().add(index, person.getPersonPane());
+                    studentListFlowPane.getChildren().add(Math.max(index, 0), person.getPersonPane());
                 }));
         //Loops through students
         personList.forEach(person -> person.idProperty().addListener((observable, t1, t2) -> {
@@ -169,7 +166,7 @@ public class AttendanceOverviewController implements Initializable {
             studentListFlowPane.getChildren().remove(person.getPersonPane());
             person.getPersonPane().setAccessibleText(String.format("%d", t2));
             person.getPersonPane().getChildren().forEach(c -> c.setAccessibleText(String.format("%d", t2)));
-            studentListFlowPane.getChildren().add(index, person.getPersonPane());
+            studentListFlowPane.getChildren().add(Math.max(index, 0), person.getPersonPane());
         }));
 
         //listens for changes in the studentlist and removes/adds the studentpanes accordingly
@@ -197,14 +194,8 @@ public class AttendanceOverviewController implements Initializable {
                 , new MenuItemBit("Edit Person", v -> editPerson()).getMenuItem()
                 , new MenuItemBit("Delete Person", v -> deletePerson()).getMenuItem()
                 , new SeparatorMenuItem()
-                , new MenuItemBit("show student's absence",v->{
-                    Scene scene = new Scene(new BorderPane(PieChartUtils.getStudentAbsencePieChart(sessionManager.getSelectedStudent())));
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    stage.show();
-        }).getMenuItem()
-        , new MenuItemBit("Get total absence barchart",v->{ // this should work dunno why it stopped working
-                    Scene scene = new Scene(new BorderPane(BarChartUtils.getTotalIndividualAbsenceBarChart(studentList)));
+                , new MenuItemBit("show student's absence", v -> {
+                    Scene scene = new Scene(new BorderPane(PieChartUtility.getStudentAbsencePieChart(sessionManager.getSelectedStudent())));
                     Stage stage = new Stage();
                     stage.setScene(scene);
                     stage.show();

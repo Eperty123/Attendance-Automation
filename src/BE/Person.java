@@ -136,7 +136,7 @@ public class Person {
      * @return
      */
     public BorderPane getPersonPane() {
-        return personPane;
+        return this.personPane;
     }
 
     /**
