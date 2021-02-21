@@ -1,69 +1,125 @@
 package BE.INTERFACE;
 
+import BE.Teacher;
+import BE.TeacherLogin;
 import BE.Utils.Session;
 import BE.Student;
+import GUI.CONTROLLER.AttendanceOverviewController;
 import GUI.Main;
 
 import java.util.List;
 
 public interface ISessionManager {
-    public ISessionManager getSessionManager();
 
-    public void setSessionManager(ISessionManager sessionManager);
+    ISessionManager getSessionManager();
+
+    void setSessionManager(ISessionManager sessionManager);
 
     /**
      * Get the assigned main controller instance.
      *
      * @return The current main controller instance.
      */
-    public Main getMainController();
+    Main getMainController();
 
     /**
      * Set the main controller instance.
      *
      * @param mainController The main controller to use.
      */
-    public void setMainController(Main mainController);
+    void setMainController(Main mainController);
 
     /**
-     * Does a student exist in the configuration?
+     * Get the assigned AttendanceOverviewController.
      *
      * @return
      */
-    public boolean hasStudents();
+    AttendanceOverviewController getAttendanceOVerviewController();
+
+    /**
+     * Assign the AttendanceOverviewController.
+     *
+     * @param attendanceOverviewController The AttendanceOVerviewController to use.
+     */
+    void setAttendanceOverviewController(AttendanceOverviewController attendanceOverviewController);
+
+    /**
+     * Does a student exist?
+     *
+     * @return
+     */
+    boolean hasStudents();
 
     /**
      * Get the Session instance.
      *
      * @return
      */
-    public Session getSession();
+    Session getSession();
 
     /**
      * Get the current Session's students.
      *
      * @return
      */
-    public List<Student> getStudentList();
+    List<Student> getStudentList();
 
     /**
      * Set the Session's student list array.
      *
      * @param studentList
      */
-    public void setStudentList(List<Student> studentList);
+    void setStudentList(List<Student> studentList);
 
     /**
      * Get the selected student from the student overview.
      *
      * @return The selected student.
      */
-    public Student getSelectedStudent();
+    Student getSelectedStudent();
 
     /**
      * Set the selected student.
      *
      * @param student The selected student to use.
      */
-    public void setSelectedStudent(Student student);
+    void setSelectedStudent(Student student);
+
+    /**
+     * Does a teacher exist?
+     *
+     * @return
+     */
+    boolean hasTeachers();
+
+    /**
+     * Get the Session's teachers.
+     *
+     * @return
+     */
+    List<Teacher> getTeachers();
+
+    /**
+     * Set Session's teacher list array.
+     */
+    void setTeachers(List<Teacher> teachers);
+
+    /**
+     * Is a teacher logged in?
+     */
+    boolean isTeacherLoggedIn();
+
+    /**
+     * Get the current logged in teacher.
+     *
+     * @return
+     */
+    Teacher getLoggedInTeacher();
+
+    /**
+     * Assign the current logged in teacher.
+     *
+     * @param teacher The teacher to set as logged in.
+     */
+    void setLoggedInTeacher(Teacher teacher);
 }

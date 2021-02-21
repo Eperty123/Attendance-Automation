@@ -126,7 +126,7 @@ public class Person {
     public void setPicture(String picture) {
         File file = new File(picture);
         if (file.exists()) {
-        this.picture.set(new Image(picture));
+            this.picture.set(new Image(picture));
         }
     }
 

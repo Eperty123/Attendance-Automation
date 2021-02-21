@@ -1,6 +1,7 @@
 package GUI.CONTROLLER;
 
 import BE.Student;
+import GUI.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -19,12 +20,10 @@ public class EditOrNewPersonController {
     private TextField pictureUrlField;
     private Student student;
 
-    public AttendanceOverviewController attendanceOverviewController;
+    private Main main = Main.getInstance();
 
-    public void setAttendanceOverviewController(AttendanceOverviewController attendanceOverviewController) {
-        this.attendanceOverviewController = attendanceOverviewController;
-    }
-
+    public AttendanceOverviewController attendanceOverviewController = main.getSessionManager().getAttendanceOVerviewController();
+    
     public TextField getIdField() {
         return idField;
     }
@@ -67,18 +66,18 @@ public class EditOrNewPersonController {
                 if (!this.student.getPicture().getUrl().equals(pictureUrlField.getText()))
                     this.student.setPicture(pictureUrlField.getText());
             }
-            attendanceOverviewController.getMain().getActiveStage().setScene(attendanceOverviewController.getOldScene());
+            //attendanceOverviewController.getMain().getActiveStage().setScene(attendanceOverviewController.getOldScene());
         }
     }
 
     public void cancel() {
-        attendanceOverviewController.getMain().getActiveStage().setScene(attendanceOverviewController.getOldScene());
+        //attendanceOverviewController.getMain().getActiveStage().setScene(attendanceOverviewController.getOldScene());
     }
 
     public void pickUrl() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File("./src/gui/pictures"));
-        File file = fileChooser.showOpenDialog(attendanceOverviewController.getMain().getActiveStage());
+        File file = fileChooser.showOpenDialog(Main.getInstance().getActiveStage());
         try {
             pictureUrlField.setText("file:/" + file.getCanonicalPath());
         } catch (IOException e) {

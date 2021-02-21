@@ -2,7 +2,6 @@ package GUI;
 
 import BE.INTERFACE.ISessionManager;
 import BE.Utils.SessionManager;
-import GUI.CONTROLLER.AttendanceOverviewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,17 +9,28 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class Main extends Application {
 
     private Stage activeStage;
     private Stage primaryStage;
     private static Main instance;
 
-    public ISessionManager sessionManager = SessionManager.getInstance();
+    /**
+     * Grab a singleton instance to make sure it gets instantiated for child controllers.
+     */
+    private ISessionManager sessionManager = SessionManager.getInstance();
 
+    /**
+     * Get the singleton instance of Main.
+     *
+     * @return
+     */
     public static Main getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new Main();
+        }
         return instance;
     }
 
@@ -28,17 +38,20 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         instance = this;
-        this.primaryStage = primaryStage;
-        activeStage = primaryStage;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("FXML/AttendanceOverview.fxml"));
         Parent root = loader.load();
-        AttendanceOverviewController viewController = loader.getController();
-        viewController.setMain(this);
-
+        loader.getController();
         primaryStage.setTitle("Attendance Overview");
         primaryStage.setScene(new Scene(root));
+
+        // Assign the stages now that they've been initialized.
+        this.primaryStage = primaryStage;
+        activeStage = primaryStage;
+
+        // And show the AttendanceOVerview.
         primaryStage.show();
+        System.out.println(String.format("Initial scene: %s", primaryStage.getScene()));
     }
 
 
@@ -74,10 +87,34 @@ public class Main extends Application {
             } else {
                 getActiveStage().getScene().setRoot(page);
             }
+
+            getActiveStage().setScene(scene);
             getActiveStage().setTitle(title);
             getActiveStage().centerOnScreen();
+            //System.out.println(String.format("Changing stage to: %s", getActiveStage()));
         }
         return loader.getController();
+    }
+
+    /**
+     * Change the current stage to the specified fxml.
+     *
+     * @param scene The scene to load.
+     * @param fxml  The fxml path of the scene.
+     * @param title The title for the scene.
+     * @return Returns the stage's controller.
+     * @throws Exception Any exceptions.
+     */
+    public Stage changeScene(Scene scene, String fxml, String title) throws IOException {
+        if (scene != null) {
+            Parent pane = FXMLLoader.load(getClass().getResource(fxml));
+            getActiveStage().getScene().setRoot(pane);
+            //getActiveStage().setScene(scene);
+            getActiveStage().setTitle(title);
+            getActiveStage().centerOnScreen();
+            return getActiveStage();
+        }
+        return null;
     }
 
     /**
@@ -101,5 +138,14 @@ public class Main extends Application {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
         return loader.getController();
+    }
+
+    /**
+     * Get the session manager.
+     *
+     * @return The instanced session manager.
+     */
+    public ISessionManager getSessionManager() {
+        return sessionManager;
     }
 }

@@ -1,39 +1,68 @@
 package GUI.CONTROLLER;
 
+import BE.INTERFACE.ISessionManager;
 import BE.Teacher;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import GUI.Main;
+import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class TeacherLoginController {
+    @FXML
     public PasswordField passwordField;
+
+    @FXML
     public TextField usernameField;
-    public AttendanceOverviewController attendanceOverviewController;
 
-    public void setAttendanceOverviewController(AttendanceOverviewController attendanceOverviewController) {
-        this.attendanceOverviewController = attendanceOverviewController;
+    protected Main main = Main.getInstance();
+    protected ISessionManager sessionManager = main.getSessionManager();
+
+    /**
+     * Handle the event for canceling log in.
+     */
+    public void handleCancelLogin() {
+        try {
+            main.changeStage("/GUI/FXML/AttendanceOverview.fxml", "Attendance OVerview");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void handleCancelLogin(){
-    attendanceOverviewController.getMain().getActiveStage().setScene(attendanceOverviewController.getOldScene());
+    /**
+     * Handle the event for logging in.
+     */
+    public void handleLogin() {
+        try {
+
+            var foundTeacher = checkLogin();
+            if (foundTeacher != null) {
+                sessionManager.setLoggedInTeacher(foundTeacher);
+                main.changeStage("/GUI/FXML/AttendanceOverview.fxml", String.format("Attendance Overview (Teacher: %s)", foundTeacher.getFullName()));
+            } else {
+                sessionManager.setLoggedInTeacher(null);
+            }
+        } catch (
+                IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void handleLogin(){
-    if(passwordField.getText().equals(Teacher.password)){
-        attendanceOverviewController.setIsTeacher(true);
-        attendanceOverviewController.getMain().getActiveStage().setScene(attendanceOverviewController.getOldScene());
-    }
-    else{
-        attendanceOverviewController.setIsTeacher(false);
-        attendanceOverviewController.getMain().getActiveStage().setScene(attendanceOverviewController.getOldScene());
-
-    }
+    /**
+     * Check the username and password for the teacher.
+     *
+     * @return
+     */
+    private Teacher checkLogin() {
+        var teachers = sessionManager.getTeachers();
+        for (int i = 0; i < teachers.size(); i++) {
+            var teacher = teachers.get(i);
+            boolean gotCredentials = teacher.getLogin().getUsername().equals(usernameField.getText()) && teacher.getLogin().getPassword().equals(passwordField.getText());
+            if (gotCredentials) return teacher;
+        }
+        return null;
     }
 }
