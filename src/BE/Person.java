@@ -14,10 +14,8 @@ public class Person {
     protected StringProperty lastName = new SimpleStringProperty("");
     protected ObjectProperty<Image> picture = new SimpleObjectProperty<Image>(new Image("/GUI/Pictures/noIMG.png"));
     protected BorderPane personPane;
-    protected AttendanceUtility attendanceUtility;
 
     public Person() {
-        attendanceUtility = new AttendanceUtility();
     }
 
     public Person(int id, String firstName) {

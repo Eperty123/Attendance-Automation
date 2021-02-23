@@ -1,9 +1,9 @@
 package BE.Utils;
 
+import BE.Student;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
-import javafx.fxml.FXMLLoader;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,20 +11,22 @@ import java.util.*;
 
 public class AttendanceUtility {
     static List<String> days = Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
-    protected ObservableList<LocalDateTime> daysAttended = FXCollections.observableArrayList(new ArrayList<>());
-    protected ObservableList<LocalDate> absentDays = FXCollections.observableArrayList(new ArrayList<>());
-    protected static ObservableSet<LocalDate> dateSet = FXCollections.observableSet(new HashSet<LocalDate>());
-    protected ObservableSet<LocalDate> studentDateSet = FXCollections.observableSet(new HashSet<LocalDate>());
+    protected static Set<LocalDate> dateSet = new HashSet<LocalDate>();
+    protected List<LocalDateTime> daysAttended;
+    protected Set<LocalDate> studentDateSet;
+
+    public AttendanceUtility(){
+        this.daysAttended = new ArrayList<LocalDateTime>();
+        this.studentDateSet = new HashSet<LocalDate>();
+    }
 
     /**
      * Attends current date
      */
     public void attend() {
-        daysAttended.add(LocalDateTime.now());
-        studentDateSet.add(LocalDate.now());
+        this.daysAttended.add(LocalDateTime.now());
+        this.studentDateSet.add(LocalDate.now());
         dateSet.add(LocalDate.now());
-        absentDays = FXCollections.observableArrayList(new ArrayList<>(AttendanceUtility.dateSet));
-        absentDays.removeAll(this.studentDateSet);
     }
 
     /**
@@ -33,11 +35,9 @@ public class AttendanceUtility {
      * @param localDateTime the date you want to add
      */
     public void attend(LocalDateTime localDateTime) {
-        daysAttended.add(localDateTime);
-        studentDateSet.add(localDateTime.toLocalDate());
+        this.daysAttended.add(localDateTime);
+        this.studentDateSet.add(localDateTime.toLocalDate());
         dateSet.add(localDateTime.toLocalDate());
-        absentDays = FXCollections.observableArrayList(new ArrayList<>(AttendanceUtility.dateSet));
-        absentDays.removeAll(this.studentDateSet);
     }
 
     /**
@@ -45,7 +45,7 @@ public class AttendanceUtility {
      *
      * @return the days attended.
      */
-    public ObservableList<LocalDateTime> getDaysAttended() {
+    public List<LocalDateTime> getDaysAttended() {
         return daysAttended;
     }
 
@@ -54,7 +54,7 @@ public class AttendanceUtility {
      *
      * @return a set of days
      */
-    public ObservableSet<LocalDate> getDaysWithAtleastOneAttend() {
+    public Set<LocalDate> getDaysWithAtleastOneAttend() {
         return dateSet;
     }
 
@@ -79,6 +79,7 @@ public class AttendanceUtility {
      * @return A percentage of total attendance
      */
     public double getAbsencePercentage() {
+        Set<LocalDate> absentDays = updateAbsentDates();
         return (double) (absentDays.size() * 100) / AttendanceUtility.dateSet.size();
     }
 
@@ -88,6 +89,7 @@ public class AttendanceUtility {
      * @return the day with most absence or none if there is no max.
      */
     public String getMostAbsentDay() {
+        Set<LocalDate> absentDays = updateAbsentDates();
         int[] dayFreq = new int[5];
         absentDays.forEach(d -> {
                     if (d.getDayOfWeek().getValue() < 6)
@@ -103,6 +105,7 @@ public class AttendanceUtility {
      * @return the amount of absence
      */
     public int getTotalAbsence() {
+        Set<LocalDate> absentDays = updateAbsentDates();
         return absentDays.size();
     }
 
@@ -112,6 +115,7 @@ public class AttendanceUtility {
      * @return a array of frequencies
      */
     public int[] getWeekDaysAbsent() {
+        Set<LocalDate> absentDays = updateAbsentDates();
         int[] dayFreq = new int[5];
         absentDays.forEach(d -> {
                     if (d.getDayOfWeek().getValue() < 6)
@@ -121,12 +125,19 @@ public class AttendanceUtility {
         return dayFreq;
     }
 
+    private Set<LocalDate> updateAbsentDates() {
+        Set<LocalDate> absentDays = new HashSet<>(getDaysWithAtleastOneAttend());
+        daysAttended.forEach(d->absentDays.remove(d.toLocalDate()));
+        return absentDays;
+    }
+
     /**
      * gets the list of absent days
      *
      * @return a list of the absent days
      */
-    public List<LocalDate> getAbsentDays() {
+    public Set<LocalDate> getAbsentDays() {
+        Set<LocalDate> absentDays = updateAbsentDates();
         return absentDays;
     }
 

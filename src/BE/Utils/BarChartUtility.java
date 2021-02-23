@@ -55,9 +55,9 @@ public class BarChartUtility {
      * @param students the students you want to examine
      * @return a BarChart
      */
-    public static BarChart<String, Number> getTotalIndividualAbsenceBarChart(ObservableList<Student> students) {
+    public static BarChart<String, Number> getTotalIndividualAbsenceBarChart(List<Student> students) {
         CategoryAxis xAxis = new CategoryAxis();
-        students.forEach(s->xAxis.getCategories().add(s.getFullName()));
+        xAxis.getCategories().addAll(days);
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Absence");
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
@@ -67,7 +67,7 @@ public class BarChartUtility {
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName(student.getFullName());
             for (int i = 0; i <= 4; i++) {
-                series.getData().add(new XYChart.Data<>(student.getFullName(), student.getAttendanceUtil().getWeekDaysAbsent()[i]));
+                series.getData().add(new XYChart.Data<>(days.get(i), student.getAttendanceUtil().getWeekDaysAbsent()[i]));
             }
             barChart.getData().add(series);
         });

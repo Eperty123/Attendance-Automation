@@ -4,6 +4,7 @@ import BE.INTERFACE.ISessionManager;
 import BE.Person;
 import BE.Student;
 import BE.Teacher;
+import BE.Utils.BarChartUtility;
 import BE.Utils.GUIHelper;
 import BE.Utils.MenuItemBit;
 import BE.Utils.SessionManager;
@@ -199,6 +200,17 @@ public class AttendanceOverviewController implements Initializable {
                     Stage stage = new Stage();
                     stage.setScene(scene);
                     stage.show();
+                }).getMenuItem()
+                , new MenuItemBit("show total individual absence chart", v -> {
+                    List<Student> tmp = new ArrayList<Student>();
+                    List<Student> tmpStudents = new ArrayList<>(studentList);
+                    tmpStudents.sort(Comparator.comparingInt(Student::getTotalAbsence));
+                    for(int i = 0;i<Math.min(5,tmpStudents.size());i++)
+                    tmp.add(tmpStudents.get(i));
+                    Scene scene = new Scene(new BorderPane(BarChartUtility.getTotalIndividualAbsenceBarChart(tmp)));
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.show();
                 }).getMenuItem());
         menuItems.forEach(e -> contextMenuPerson.getItems().add(e));
     }
@@ -331,8 +343,8 @@ public class AttendanceOverviewController implements Initializable {
      */
     public List<Student> createStudents() {
         studentList.forEach(s -> {
-            for (int i = 0; i < 10; i++)
-                s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(10)));
+            for (int i = 0; i < 100; i++)
+                s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(1000)));
             //s.setStudentPane(addToStudentListFlowPane(s));
             s.setFirstName(s.getFirstName());
         });
