@@ -20,9 +20,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
@@ -63,6 +61,8 @@ public class AttendanceOverviewController implements Initializable {
      * The select style for when clicking on a student BorderPane.
      */
     public static final String SELECTED_STYLE = "-fx-background-radius: 15;-fx-background-color: lightblue;-fx-border-style: solid;-fx-border-color: grey;-fx-border-radius: 15;";
+    @FXML
+    private TabPane tabPane;
 
     /**
      * Makes a new Random instance
@@ -198,15 +198,15 @@ public class AttendanceOverviewController implements Initializable {
                 , new MenuItemBit("Delete Person", v -> deletePerson()).getMenuItem()
                 , new SeparatorMenuItem()
                 , new MenuItemBit("show student's absence", v -> {
-                    showChart(PieChartUtility.getStudentAbsencePieChart(sessionManager.getSelectedStudent()));
+                    showChart(PieChartUtility.getStudentAbsencePieChart(sessionManager.getSelectedStudent()), sessionManager.getSelectedStudent().getFullName());
                 }).getMenuItem()
                 , new MenuItemBit("show individual absence chart (Daily basis)", v -> {
                     var tmp = getTopFiveMostAbsent();
-                    showChart(BarChartUtility.getTotalIndividualAbsenceBarChart(tmp));
+                    showChart(BarChartUtility.getTotalIndividualAbsenceBarChart(tmp), "Daily basis");
                 }).getMenuItem()
                 , new MenuItemBit("Show individual absence chart (Person Basis)", v -> {
                     var tmp = getTopFiveMostAbsent();
-                    showChart(BarChartUtility.getTotalIndividualAttendanceBarChartDaily(tmp));
+                    showChart(BarChartUtility.getTotalIndividualAttendanceBarChartDaily(tmp),"Person basis");
                 }).getMenuItem());
 
         menuItems.forEach(e -> contextMenuPerson.getItems().add(e));
@@ -229,13 +229,13 @@ public class AttendanceOverviewController implements Initializable {
      * Opens a window with the node
      * @param chart the chart if that's what you want to show
      */
-    private void showChart(Node chart) {
-        Stage stage = new Stage();
-        stage.setScene(new Scene(new BorderPane(chart)));
-        stage.show();
+    private void showChart(Node chart, String tabName) {
+        Tab tab = new Tab(tabName);
+        tab.contentProperty().set(new BorderPane(chart));
+        tabPane.getTabs().add(tab);
     }
 
-    public ObservableList<Student> getStudentList() {
+    public List<Student> getStudentList() {
         return studentList;
     }
 
