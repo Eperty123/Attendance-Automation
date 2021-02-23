@@ -16,7 +16,7 @@
          <center>
             <TabPane fx:id="tabPane">
                <tabs>
-                  <Tab closable="false" text="Studentview">
+                  <Tab closable="false" text="Student View">
                      <content>
                         <ScrollPane fitToHeight="true" fitToWidth="true">
                            <content>
