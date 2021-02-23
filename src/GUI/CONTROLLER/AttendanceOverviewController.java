@@ -16,8 +16,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
@@ -196,23 +198,41 @@ public class AttendanceOverviewController implements Initializable {
                 , new MenuItemBit("Delete Person", v -> deletePerson()).getMenuItem()
                 , new SeparatorMenuItem()
                 , new MenuItemBit("show student's absence", v -> {
-                    Scene scene = new Scene(new BorderPane(PieChartUtility.getStudentAbsencePieChart(sessionManager.getSelectedStudent())));
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    stage.show();
+                    showChart(PieChartUtility.getStudentAbsencePieChart(sessionManager.getSelectedStudent()));
                 }).getMenuItem()
-                , new MenuItemBit("show total individual absence chart", v -> {
-                    List<Student> tmp = new ArrayList<Student>();
-                    List<Student> tmpStudents = new ArrayList<>(studentList);
-                    tmpStudents.sort(Comparator.comparingInt(Student::getTotalAbsence));
-                    for(int i = 0;i<Math.min(5,tmpStudents.size());i++)
-                    tmp.add(tmpStudents.get(i));
-                    Scene scene = new Scene(new BorderPane(BarChartUtility.getTotalIndividualAbsenceBarChart(tmp)));
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    stage.show();
+                , new MenuItemBit("show individual absence chart (Daily basis)", v -> {
+                    var tmp = getTopFiveMostAbsent();
+                    showChart(BarChartUtility.getTotalIndividualAbsenceBarChart(tmp));
+                }).getMenuItem()
+                , new MenuItemBit("Show individual absence chart (Person Basis)", v -> {
+                    var tmp = getTopFiveMostAbsent();
+                    showChart(BarChartUtility.getTotalIndividualAttendanceBarChartDaily(tmp));
                 }).getMenuItem());
+
         menuItems.forEach(e -> contextMenuPerson.getItems().add(e));
+    }
+
+    /**
+     * Gets a list of the 5 students that have most absence
+     * @return a list of students
+     */
+    private List<Student> getTopFiveMostAbsent() {
+        List<Student> tmp = new ArrayList<Student>();
+        List<Student> tmpStudents = new ArrayList<>(studentList);
+        tmpStudents.sort(Comparator.comparingInt(Student::getTotalAbsence));
+        for (int i = 0; i < Math.min(5, tmpStudents.size()); i++)
+            tmp.add(tmpStudents.get(i));
+        return tmp;
+    }
+
+    /**
+     * Opens a window with the node
+     * @param chart the chart if that's what you want to show
+     */
+    private void showChart(Node chart) {
+        Stage stage = new Stage();
+        stage.setScene(new Scene(new BorderPane(chart)));
+        stage.show();
     }
 
     public ObservableList<Student> getStudentList() {

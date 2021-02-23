@@ -35,7 +35,7 @@ public class BarChartUtility {
         NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Attendance");
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
-        barChart.setTitle("Individual Attendance");
+        barChart.setTitle("Individual Attendace");
 
         for (Student student : students) {
             XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -49,9 +49,33 @@ public class BarChartUtility {
         return barChart;
     }
 
+    public static BarChart<String, Number> getTotalIndividualAttendanceBarChartDaily(List<Student> students) {
+        CategoryAxis xAxis = new CategoryAxis();
+        var tmp = new ArrayList<String>();
+        students.forEach(s -> tmp.add(s.getFullName()));
+        xAxis.setCategories(FXCollections.observableArrayList(tmp));
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Absence");
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle("Individual Absence");
+
+        for (int i = 0; i < 5; i++) {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            for (Student s : students) {
+                int[] dayFreq = s.getAttendanceUtil().getWeekDaysAbsent();
+                series.setName(days.get(i));
+                series.getData().add(new XYChart.Data<>(s.getFullName(), dayFreq[i]));
+            }
+            barChart.getData().add(series);
+        }
+
+        return barChart;
+    }
+
 
     /**
      * Gets the total individual absence bar chart
+     *
      * @param students the students you want to examine
      * @return a BarChart
      */
@@ -63,7 +87,7 @@ public class BarChartUtility {
         BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
         barChart.setTitle("Individual Absence");
 
-        students.forEach(student-> {
+        students.forEach(student -> {
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName(student.getFullName());
             for (int i = 0; i <= 4; i++) {
@@ -76,6 +100,7 @@ public class BarChartUtility {
 
     /**
      * Get the individual attendance barchart
+     *
      * @param students the students you want to examine
      * @return a BarChart with data
      */
