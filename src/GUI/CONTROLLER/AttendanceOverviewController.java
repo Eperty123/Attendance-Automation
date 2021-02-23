@@ -4,6 +4,7 @@ import BE.INTERFACE.ISessionManager;
 import BE.Person;
 import BE.Student;
 import BE.Teacher;
+import BE.Utils.BarChartUtility;
 import BE.Utils.GUIHelper;
 import BE.Utils.MenuItemBit;
 import BE.Utils.SessionManager;
@@ -15,11 +16,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.chart.BarChart;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
@@ -60,6 +61,8 @@ public class AttendanceOverviewController implements Initializable {
      * The select style for when clicking on a student BorderPane.
      */
     public static final String SELECTED_STYLE = "-fx-background-radius: 15;-fx-background-color: lightblue;-fx-border-style: solid;-fx-border-color: grey;-fx-border-radius: 15;";
+    @FXML
+    private TabPane tabPane;
 
     /**
      * Makes a new Random instance
@@ -195,15 +198,44 @@ public class AttendanceOverviewController implements Initializable {
                 , new MenuItemBit("Delete Person", v -> deletePerson()).getMenuItem()
                 , new SeparatorMenuItem()
                 , new MenuItemBit("show student's absence", v -> {
-                    Scene scene = new Scene(new BorderPane(PieChartUtility.getStudentAbsencePieChart(sessionManager.getSelectedStudent())));
-                    Stage stage = new Stage();
-                    stage.setScene(scene);
-                    stage.show();
+                    showChart(PieChartUtility.getStudentAbsencePieChart(sessionManager.getSelectedStudent()), sessionManager.getSelectedStudent().getFullName());
+                }).getMenuItem()
+                , new MenuItemBit("show individual absence chart (Daily basis)", v -> {
+                    var tmp = getTopFiveMostAbsent();
+                    showChart(BarChartUtility.getTotalIndividualAbsenceBarChart(tmp), "Daily basis");
+                }).getMenuItem()
+                , new MenuItemBit("Show individual absence chart (Person Basis)", v -> {
+                    var tmp = getTopFiveMostAbsent();
+                    showChart(BarChartUtility.getTotalIndividualAttendanceBarChartDaily(tmp),"Person basis");
                 }).getMenuItem());
+
         menuItems.forEach(e -> contextMenuPerson.getItems().add(e));
     }
 
-    public ObservableList<Student> getStudentList() {
+    /**
+     * Gets a list of the 5 students that have most absence
+     * @return a list of students
+     */
+    private List<Student> getTopFiveMostAbsent() {
+        List<Student> tmp = new ArrayList<Student>();
+        List<Student> tmpStudents = new ArrayList<>(studentList);
+        tmpStudents.sort(Comparator.comparingInt(Student::getTotalAbsence));
+        for (int i = 0; i < Math.min(5, tmpStudents.size()); i++)
+            tmp.add(tmpStudents.get(i));
+        return tmp;
+    }
+
+    /**
+     * Opens a window with the node
+     * @param chart the chart if that's what you want to show
+     */
+    private void showChart(Node chart, String tabName) {
+        Tab tab = new Tab(tabName);
+        tab.contentProperty().set(new BorderPane(chart));
+        tabPane.getTabs().add(tab);
+    }
+
+    public List<Student> getStudentList() {
         return studentList;
     }
 
@@ -331,8 +363,8 @@ public class AttendanceOverviewController implements Initializable {
      */
     public List<Student> createStudents() {
         studentList.forEach(s -> {
-            for (int i = 0; i < 10; i++)
-                s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(10)));
+            for (int i = 0; i < 100; i++)
+                s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(1000)));
             //s.setStudentPane(addToStudentListFlowPane(s));
             s.setFirstName(s.getFirstName());
         });
