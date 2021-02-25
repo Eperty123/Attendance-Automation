@@ -9,6 +9,8 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -58,14 +60,17 @@ public class GUIHelper {
             picture.setPreserveRatio(true);
             picture.setFitWidth(AttendanceOverviewController.WIDTH);
             picture.setFitHeight(AttendanceOverviewController.HEIGHT);
+            Circle signifier = new Circle(5,5,5, Paint.valueOf("Red"));
 
             // Adjust to fit the BorderPane.
             BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
             BorderPane.setAlignment(picture, Pos.CENTER);
+            BorderPane.setAlignment(signifier, Pos.BOTTOM_CENTER);
 
             // Add the elements (nodes) to the BorderPane.
             pane.setTop(studentName);
             pane.setCenter(picture);
+            pane.setBottom(signifier);
 
             // Adding styling.
             pane.setStyle(AttendanceOverviewController.DEFAULT_STYLE);

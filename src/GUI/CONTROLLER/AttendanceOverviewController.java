@@ -25,6 +25,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -266,8 +268,12 @@ public class AttendanceOverviewController implements Initializable {
      * Register the selected student as present.
      */
     private void attendDay() {
-        if (sessionManager.getSelectedStudent() != null)
+        if (sessionManager.getSelectedStudent() != null){
             sessionManager.getSelectedStudent().getAttendanceUtil().attend();
+            Circle signifier = new Circle(5,5,5, Paint.valueOf("Green"));
+            BorderPane.setAlignment(signifier,Pos.BOTTOM_CENTER);
+            sessionManager.getSelectedStudent().getStudentPane().setBottom(signifier);
+        }
     }
 
     /**
@@ -428,7 +434,7 @@ public class AttendanceOverviewController implements Initializable {
                                     // When the student id matches the accessible text (id), assign.
                                     if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText()) ||
                                             Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
-                                        student.getAttendanceUtil().attend();
+                                        attendDay();
                                         sessionManager.setSelectedStudent(student);
                                         //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                                     }
@@ -438,7 +444,6 @@ public class AttendanceOverviewController implements Initializable {
                                     System.out.println(String.format("Selected student id: %s", sessionManager.getSelectedStudent().getId()));
                                     var dashboardController = (StudentDashboardController) sessionManager.getMainController().changeStage("FXML/StudentDashboard.fxml", "Student Dashboard");
                                     dashboardController.updateDashboard();
-
                                 }
 
                             }
