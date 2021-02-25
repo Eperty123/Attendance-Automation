@@ -23,9 +23,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
+
 import BE.Utils.PieChartUtility;
 
 public class AttendanceOverviewController implements Initializable {
@@ -199,7 +201,7 @@ public class AttendanceOverviewController implements Initializable {
                 }).getMenuItem()
                 , new MenuItemBit("Show individual absence chart (Person Basis)", v -> {
                     var tmp = getTopFiveMostAbsent();
-                    showChart(BarChartUtility.getTotalIndividualAttendanceBarChartDaily(tmp),"Person basis");
+                    showChart(BarChartUtility.getTotalIndividualAttendanceBarChartDaily(tmp), "Person basis");
                 }).getMenuItem());
 
         menuItems.forEach(e -> contextMenuPerson.getItems().add(e));
@@ -207,6 +209,7 @@ public class AttendanceOverviewController implements Initializable {
 
     /**
      * Gets a list of the 5 students that have most absence
+     *
      * @return a list of students
      */
     private List<Student> getTopFiveMostAbsent() {
@@ -220,6 +223,7 @@ public class AttendanceOverviewController implements Initializable {
 
     /**
      * Opens a window with the node
+     *
      * @param chart the chart if that's what you want to show
      */
     private void showChart(Node chart, String tabName) {
@@ -236,7 +240,16 @@ public class AttendanceOverviewController implements Initializable {
      * Delete the person.
      */
     private void deletePerson() {
-        personList.remove(sessionManager.getSelectedStudent());
+        Student s = sessionManager.getSelectedStudent();
+        if (s != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText(String.format("You are deleting %s, please confirm this action.", s.getFullName()));
+            alert.showAndWait();
+            if(alert.getResult().equals(ButtonType.OK)){
+                personList.remove(s);
+                }
+        }
+
     }
 
     /**
@@ -255,9 +268,9 @@ public class AttendanceOverviewController implements Initializable {
      */
     private void attendDay() {
         Student s = sessionManager.getSelectedStudent();
-        if (s != null){
+        if (s != null) {
             s.getAttendanceUtil().attend();
-            GUIHelper.changeSignifierColor(s,"Green");
+            GUIHelper.changeSignifierColor(s, "Green");
         }
     }
 
@@ -285,7 +298,6 @@ public class AttendanceOverviewController implements Initializable {
      * Apply and load cached settings (variables) from the session manager.
      */
     private void applySessionSettings() {
-
         // Clear the StudentPane for a clean start.
         clearStudentPane();
 
