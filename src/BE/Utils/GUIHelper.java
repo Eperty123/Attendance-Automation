@@ -60,17 +60,14 @@ public class GUIHelper {
             picture.setPreserveRatio(true);
             picture.setFitWidth(AttendanceOverviewController.WIDTH);
             picture.setFitHeight(AttendanceOverviewController.HEIGHT);
-            Circle signifier = new Circle(5,5,5, Paint.valueOf("Red"));
 
             // Adjust to fit the BorderPane.
             BorderPane.setAlignment(studentName, Pos.TOP_CENTER);
             BorderPane.setAlignment(picture, Pos.CENTER);
-            BorderPane.setAlignment(signifier, Pos.BOTTOM_CENTER);
 
             // Add the elements (nodes) to the BorderPane.
             pane.setTop(studentName);
             pane.setCenter(picture);
-            pane.setBottom(signifier);
 
             // Adding styling.
             pane.setStyle(AttendanceOverviewController.DEFAULT_STYLE);
@@ -82,6 +79,14 @@ public class GUIHelper {
 
             // Assign the BorderPane to the student.
             person.setPersonPane(pane);
+            changeSignifierColor(person,"red");
         }
+    }
+
+    public static void changeSignifierColor(Person person, String color){
+        Circle signifier = new Circle(5,5,5, Paint.valueOf(color));
+        person.getPersonPane().setBottom(signifier);
+        BorderPane.setAlignment(signifier,Pos.BOTTOM_CENTER);
+        BorderPane.setMargin(signifier,new Insets(2,2,2,2));
     }
 }

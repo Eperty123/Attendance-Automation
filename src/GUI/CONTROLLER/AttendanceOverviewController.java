@@ -13,28 +13,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
-
 import BE.Utils.PieChartUtility;
 
 public class AttendanceOverviewController implements Initializable {
@@ -253,12 +244,7 @@ public class AttendanceOverviewController implements Initializable {
      */
     private void editPerson() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/FXML/EditOrNewPerson.fxml"));
-            Parent editParent = loader.load();
-            EditOrNewPersonController controller = loader.getController();
-            Student student = sessionManager.getSelectedStudent();
-            controller.setStudent(student);
-            main.getActiveStage().setScene(new Scene(editParent));
+            main.changeStage("/GUI/FXML/EditOrNewPerson.fxml", "Edit Person");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -268,11 +254,10 @@ public class AttendanceOverviewController implements Initializable {
      * Register the selected student as present.
      */
     private void attendDay() {
-        if (sessionManager.getSelectedStudent() != null){
-            sessionManager.getSelectedStudent().getAttendanceUtil().attend();
-            Circle signifier = new Circle(5,5,5, Paint.valueOf("Green"));
-            BorderPane.setAlignment(signifier,Pos.BOTTOM_CENTER);
-            sessionManager.getSelectedStudent().getStudentPane().setBottom(signifier);
+        Student s = sessionManager.getSelectedStudent();
+        if (s != null){
+            s.getAttendanceUtil().attend();
+            GUIHelper.changeSignifierColor(s,"Green");
         }
     }
 
@@ -281,10 +266,7 @@ public class AttendanceOverviewController implements Initializable {
      */
     private void addStudent() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/FXML/EditOrNewPerson.fxml"));
-            Parent editParent = loader.load();
-            EditOrNewPersonController controller = loader.getController();
-            main.getActiveStage().setScene(new Scene(editParent));
+            main.changeStage("/GUI/FXML/EditOrNewPerson.fxml", "Add Person");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -335,7 +317,7 @@ public class AttendanceOverviewController implements Initializable {
         // List the students.
         for (int i = 0; i < studentList.size(); i++) {
             var student = studentList.get(i);
-            student.setStudentPane(addToStudentListFlowPane(student));
+            student.setPersonPane(addToStudentListFlowPane(student));
         }
 
         // If the session manager doesn't have an instance of AttendanceOverviewController,
@@ -359,7 +341,6 @@ public class AttendanceOverviewController implements Initializable {
     private void clearStudentPane() {
         // Clear the student FlowPane for a clean start.
         studentListFlowPane.getChildren().clear();
-        //studentList.clear();
     }
 
     /**
@@ -371,8 +352,6 @@ public class AttendanceOverviewController implements Initializable {
         studentList.forEach(s -> {
             for (int i = 0; i < 100; i++)
                 s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(1000)));
-            //s.setStudentPane(addToStudentListFlowPane(s));
-            s.setFirstName(s.getFirstName());
         });
         return studentList;
     }

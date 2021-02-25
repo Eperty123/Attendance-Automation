@@ -4,6 +4,7 @@ import BE.Student;
 import BE.Utils.SessionManager;
 import GUI.Main;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 
@@ -24,7 +25,7 @@ public class EditOrNewPersonController {
     private Main main = SessionManager.getInstance().getMainController();
 
     public AttendanceOverviewController attendanceOverviewController = main.getSessionManager().getAttendanceOVerviewController();
-    
+
     public TextField getIdField() {
         return idField;
     }
@@ -53,8 +54,26 @@ public class EditOrNewPersonController {
         return this.student;
     }
 
+    public boolean checkIdIsNumber(String id){
+        try {
+            Long.parseLong(id);
+            return true;
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Invalid id. Please use a valid number as your id.");
+            alert.show();
+            return false;
+        }
+    }
+
+    /**
+     * Checks that the input is valid, and if it is valid it makes the changes or creates the person
+     * Shows a warning if something is invalid.
+     */
     public void confirm() {
-        if (!idField.getText().isEmpty() && !firstNameField.getText().isEmpty() && !lastNameField.getText().isEmpty() && !pictureUrlField.getText().isEmpty()) {
+        if (!idField.getText().isEmpty() && !firstNameField.getText().isEmpty() && !lastNameField.getText().isEmpty()) {
+            if(!checkIdIsNumber(idField.getId()))
+                return;
             if (student == null) {
                 attendanceOverviewController.getStudentList().add(new Student(Integer.parseInt(idField.getText()), firstNameField.getText(), lastNameField.getText(), pictureUrlField.getText()));
             } else {
@@ -62,24 +81,27 @@ public class EditOrNewPersonController {
                     this.student.setId(Long.parseLong(idField.getText()));
                 if (!this.student.getFirstName().equals(firstNameField.getText()))
                     this.student.setFirstName(firstNameField.getText());
-                if (!this.student.getLastName().equals(lastNameField.getText()))
+                if(!this.student.getLastName().equals(lastNameField.getText()))
                     this.student.setLastName(lastNameField.getText());
-                if (!this.student.getPicture().getUrl().equals(pictureUrlField.getText()))
+                if(!this.student.getPicture().getUrl().equals(pictureUrlField.getText()))
                     this.student.setPicture(pictureUrlField.getText());
             }
-
             try {
-                main.changeStage("FXML/AttendanceOverview.fxml","");
+                main.changeStage("FXML/AttendanceOverview.fxml", "");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        else{
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("A field is empty. PLease fill it out.");
+            alert.show();
+        }
     }
 
     public void cancel() {
-
         try {
-            main.changeStage("FXML/AttendanceOverview.fxml","");
+            main.changeStage("FXML/AttendanceOverview.fxml", "");
         } catch (Exception e) {
             e.printStackTrace();
         }
