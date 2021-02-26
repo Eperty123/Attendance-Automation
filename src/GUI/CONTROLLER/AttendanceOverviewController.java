@@ -394,7 +394,7 @@ public class AttendanceOverviewController implements Initializable {
                         ^ studentNode.getAccessibleText().equals(selectedNode.getParent().getAccessibleText())) {
                     studentNode.setStyle(SELECTED_STYLE);
 
-                    // Assign the configuration's selected student to the selected one though the node.
+                    // Assign the session manager's selected student to the selected one though the node.
                     sessionManager.getStudentList().forEach((student) -> {
 
                         // When the student id matches the accessible text (id), assign.
