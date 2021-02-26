@@ -1,4 +1,4 @@
-package BE.Utils;
+package BE.UTILITY;
 
 import BE.Student;
 import javafx.collections.FXCollections;
@@ -8,8 +8,6 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;

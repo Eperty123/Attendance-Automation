@@ -1,7 +1,6 @@
 package BE;
 
-import BE.Utils.AttendanceUtility;
-import BE.Utils.GUIHelper;
+import BE.UTILITY.GUIHelper;
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;

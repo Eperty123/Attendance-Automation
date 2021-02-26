@@ -1,9 +1,9 @@
 package GUI.CONTROLLER;
 
 import BE.INTERFACE.ISessionManager;
-import BE.Utils.GUIHelper;
-import BE.Utils.PieChartUtility;
-import BE.Utils.SessionManager;
+import BE.UTILITY.GUIHelper;
+import BE.UTILITY.PieChartUtility;
+import BE.UTILITY.SessionManager;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.FlowPane;

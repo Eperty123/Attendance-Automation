@@ -2,7 +2,7 @@ package BE.INTERFACE;
 
 import BE.Student;
 import BE.Teacher;
-import BE.Utils.Session;
+import BE.UTILITY.Session;
 import GUI.CONTROLLER.AttendanceOverviewController;
 import GUI.Main;
 import javafx.stage.Stage;

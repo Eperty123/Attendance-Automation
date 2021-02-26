@@ -1,4 +1,4 @@
-package BE.Utils;
+package BE.UTILITY;
 
 import BE.Person;
 import BE.Student;

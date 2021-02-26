@@ -1,4 +1,4 @@
-package BE.Utils;
+package BE.UTILITY;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

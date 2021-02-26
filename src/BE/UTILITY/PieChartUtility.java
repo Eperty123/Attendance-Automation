@@ -1,4 +1,4 @@
-package BE.Utils;
+package BE.UTILITY;
 
 import BE.Student;
 import javafx.beans.binding.Bindings;

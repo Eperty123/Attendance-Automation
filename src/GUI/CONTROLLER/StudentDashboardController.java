@@ -2,7 +2,7 @@ package GUI.CONTROLLER;
 
 import BE.INTERFACE.ISessionManager;
 import BE.Student;
-import BE.Utils.SessionManager;
+import BE.UTILITY.SessionManager;
 import GUI.Main;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

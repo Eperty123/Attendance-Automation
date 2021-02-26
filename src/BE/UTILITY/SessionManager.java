@@ -1,4 +1,4 @@
-package BE.Utils;
+package BE.UTILITY;
 
 import BE.INTERFACE.ISessionManager;
 import BE.Student;
