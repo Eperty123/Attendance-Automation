@@ -30,7 +30,7 @@ public class GUIHelper {
 
             double totalPercentage = student.getAttendanceUtil().getAbsencePercentage();
 
-        var totalAbsencePercentageText = new Text(String.format("Total absence: %s%%", totalPercentage));
+        var totalAbsencePercentageText = new Text(String.format("Total absence: %.02f%%", totalPercentage));
         totalAbsencePercentageText.setFont(font);
         BorderPane.setAlignment(totalAbsencePercentageText, Pos.CENTER);
         pane.setBottom(totalAbsencePercentageText);
