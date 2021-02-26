@@ -12,7 +12,7 @@ import java.io.File;
  * Use GUIHelper to create GUI stuff from the Student class.
  */
 public class Student extends Person{
-    protected BorderPane studentPane;
+    protected BorderPane personPane;
     protected AttendanceUtility attendanceUtility = new AttendanceUtility();
 
     public Student() {
@@ -124,9 +124,11 @@ public class Student extends Person{
      */
     @Override
     public void setPicture(String picture) {
+        if(!picture.isEmpty()){
         File file = new File(picture);
         if (file.exists()) {
             super.picture.set(new Image(picture));
+        }
         }
     }
 
@@ -135,17 +137,17 @@ public class Student extends Person{
      *
      * @return
      */
-    public BorderPane getStudentPane() {
+    public BorderPane getPersonPane() {
         return super.personPane;
     }
 
     /**
      * Set the student's BorderPane.
      *
-     * @param studentPane
+     * @param personPane
      */
-    public void setStudentPane(BorderPane studentPane) {
-        super.personPane = studentPane;
+    public void setPersonPane(BorderPane personPane) {
+        super.personPane = personPane;
     }
 
     /**

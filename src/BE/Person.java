@@ -140,10 +140,10 @@ public class Person {
     /**
      * Set the student's BorderPane.
      *
-     * @param studentPane
+     * @param personPane
      */
-    public void setPersonPane(BorderPane studentPane) {
-        this.personPane = studentPane;
+    public void setPersonPane(BorderPane personPane) {
+        this.personPane = personPane;
     }
 
     /**

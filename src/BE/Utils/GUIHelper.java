@@ -9,6 +9,8 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -77,6 +79,14 @@ public class GUIHelper {
 
             // Assign the BorderPane to the student.
             person.setPersonPane(pane);
+            changeSignifierColor(person,"red");
         }
+    }
+
+    public static void changeSignifierColor(Person person, String color){
+        Circle signifier = new Circle(5,5,5, Paint.valueOf(color));
+        person.getPersonPane().setBottom(signifier);
+        BorderPane.setAlignment(signifier,Pos.BOTTOM_CENTER);
+        BorderPane.setMargin(signifier,new Insets(2,2,2,2));
     }
 }

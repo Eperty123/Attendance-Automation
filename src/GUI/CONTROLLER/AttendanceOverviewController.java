@@ -13,13 +13,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -27,7 +23,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -206,7 +201,7 @@ public class AttendanceOverviewController implements Initializable {
                 }).getMenuItem()
                 , new MenuItemBit("Show individual absence chart (Person Basis)", v -> {
                     var tmp = getTopFiveMostAbsent();
-                    showChart(BarChartUtility.getTotalIndividualAttendanceBarChartDaily(tmp),"Person basis");
+                    showChart(BarChartUtility.getTotalIndividualAttendanceBarChartDaily(tmp), "Person basis");
                 }).getMenuItem());
 
         menuItems.forEach(e -> contextMenuPerson.getItems().add(e));
@@ -214,6 +209,7 @@ public class AttendanceOverviewController implements Initializable {
 
     /**
      * Gets a list of the 5 students that have most absence
+     *
      * @return a list of students
      */
     private List<Student> getTopFiveMostAbsent() {
@@ -227,6 +223,7 @@ public class AttendanceOverviewController implements Initializable {
 
     /**
      * Opens a window with the node
+     *
      * @param chart the chart if that's what you want to show
      */
     private void showChart(Node chart, String tabName) {
@@ -243,7 +240,16 @@ public class AttendanceOverviewController implements Initializable {
      * Delete the person.
      */
     private void deletePerson() {
-        personList.remove(sessionManager.getSelectedStudent());
+        Student s = sessionManager.getSelectedStudent();
+        if (s != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText(String.format("You are deleting %s, please confirm this action.", s.getFullName()));
+            alert.showAndWait();
+            if(alert.getResult().equals(ButtonType.OK)){
+                personList.remove(s);
+                }
+        }
+
     }
 
     /**
@@ -251,12 +257,7 @@ public class AttendanceOverviewController implements Initializable {
      */
     private void editPerson() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/FXML/EditOrNewPerson.fxml"));
-            Parent editParent = loader.load();
-            EditOrNewPersonController controller = loader.getController();
-            Student student = sessionManager.getSelectedStudent();
-            controller.setStudent(student);
-            main.getActiveStage().setScene(new Scene(editParent));
+            main.changeStage("/GUI/FXML/EditOrNewPerson.fxml", "Edit Person");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -266,8 +267,11 @@ public class AttendanceOverviewController implements Initializable {
      * Register the selected student as present.
      */
     private void attendDay() {
-        if (sessionManager.getSelectedStudent() != null)
-            sessionManager.getSelectedStudent().getAttendanceUtil().attend();
+        Student s = sessionManager.getSelectedStudent();
+        if (s != null) {
+            s.getAttendanceUtil().attend();
+            GUIHelper.changeSignifierColor(s, "Green");
+        }
     }
 
     /**
@@ -275,10 +279,7 @@ public class AttendanceOverviewController implements Initializable {
      */
     private void addStudent() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/FXML/EditOrNewPerson.fxml"));
-            Parent editParent = loader.load();
-            EditOrNewPersonController controller = loader.getController();
-            main.getActiveStage().setScene(new Scene(editParent));
+            main.changeStage("/GUI/FXML/EditOrNewPerson.fxml", "Add Person");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -297,7 +298,6 @@ public class AttendanceOverviewController implements Initializable {
      * Apply and load cached settings (variables) from the session manager.
      */
     private void applySessionSettings() {
-
         // Clear the StudentPane for a clean start.
         clearStudentPane();
 
@@ -329,7 +329,7 @@ public class AttendanceOverviewController implements Initializable {
         // List the students.
         for (int i = 0; i < studentList.size(); i++) {
             var student = studentList.get(i);
-            student.setStudentPane(addToStudentListFlowPane(student));
+            student.setPersonPane(addToStudentListFlowPane(student));
         }
 
         // If the session manager doesn't have an instance of AttendanceOverviewController,
@@ -353,7 +353,6 @@ public class AttendanceOverviewController implements Initializable {
     private void clearStudentPane() {
         // Clear the student FlowPane for a clean start.
         studentListFlowPane.getChildren().clear();
-        //studentList.clear();
     }
 
     /**
@@ -365,8 +364,6 @@ public class AttendanceOverviewController implements Initializable {
         studentList.forEach(s -> {
             for (int i = 0; i < 100; i++)
                 s.getAttendanceUtil().attend(LocalDateTime.now().minusDays(random.nextInt(1000)));
-            //s.setStudentPane(addToStudentListFlowPane(s));
-            s.setFirstName(s.getFirstName());
         });
         return studentList;
     }
@@ -428,7 +425,7 @@ public class AttendanceOverviewController implements Initializable {
                                     // When the student id matches the accessible text (id), assign.
                                     if (Long.toString(student.getId()).equals(selectedNode.getAccessibleText()) ||
                                             Long.toString(student.getId()).equals(selectedNode.getParent().getAccessibleText())) {
-                                        student.getAttendanceUtil().attend();
+                                        attendDay();
                                         sessionManager.setSelectedStudent(student);
                                         //System.out.println(String.format("Assigned selected student: %s", student.getId()));
                                     }
@@ -438,7 +435,6 @@ public class AttendanceOverviewController implements Initializable {
                                     System.out.println(String.format("Selected student id: %s", sessionManager.getSelectedStudent().getId()));
                                     var dashboardController = (StudentDashboardController) sessionManager.getMainController().changeStage("FXML/StudentDashboard.fxml", "Student Dashboard");
                                     dashboardController.updateDashboard();
-
                                 }
 
                             }

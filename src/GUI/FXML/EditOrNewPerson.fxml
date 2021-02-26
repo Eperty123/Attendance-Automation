@@ -13,7 +13,7 @@
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <TilePane alignment="TOP_CENTER" prefRows="2" prefHeight="200.0" prefTileHeight="25.0" prefTileWidth="200.0" prefWidth="200.0">
+            <TilePane alignment="TOP_CENTER" prefRows="2" prefHeight="200.0" maxWidth="300" prefTileHeight="25.0" prefTileWidth="200.0" prefWidth="200.0">
                <children>
                   <Label text="StudentID" />
                   <TextField onAction="#confirm" fx:id="idField" />
