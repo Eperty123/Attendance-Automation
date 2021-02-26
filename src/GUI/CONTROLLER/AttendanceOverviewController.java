@@ -4,10 +4,7 @@ import BE.INTERFACE.ISessionManager;
 import BE.Person;
 import BE.Student;
 import BE.Teacher;
-import BE.Utils.BarChartUtility;
-import BE.Utils.GUIHelper;
-import BE.Utils.MenuItemBit;
-import BE.Utils.SessionManager;
+import BE.Utils.*;
 import GUI.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -27,8 +24,6 @@ import javafx.scene.text.Text;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.*;
-
-import BE.Utils.PieChartUtility;
 
 public class AttendanceOverviewController implements Initializable {
 
@@ -192,10 +187,10 @@ public class AttendanceOverviewController implements Initializable {
                 , new MenuItemBit("Edit Person", v -> editPerson()).getMenuItem()
                 , new MenuItemBit("Delete Person", v -> deletePerson()).getMenuItem()
                 , new SeparatorMenuItem()
-                , new MenuItemBit("show student's absence", v -> {
+                , new MenuItemBit("Show student's absence", v -> {
                     showChart(PieChartUtility.getStudentAbsencePieChart(sessionManager.getSelectedStudent()), sessionManager.getSelectedStudent().getFullName());
                 }).getMenuItem()
-                , new MenuItemBit("show individual absence chart (Daily basis)", v -> {
+                , new MenuItemBit("Show individual absence chart (Daily basis)", v -> {
                     var tmp = getTopFiveMostAbsent();
                     showChart(BarChartUtility.getTotalIndividualAbsenceBarChart(tmp), "Daily basis");
                 }).getMenuItem()
