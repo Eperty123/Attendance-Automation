@@ -258,6 +258,7 @@ public class AttendanceOverviewController implements Initializable {
     private void editPerson() {
         try {
             main.changeStage("/GUI/FXML/EditOrNewPerson.fxml", "Edit Person");
+            main.getEditOrNewPersonController().setStudent(sessionManager.getSelectedStudent());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package GUI;
 
 import BE.INTERFACE.ISessionManager;
 import BE.Utils.SessionManager;
+import GUI.CONTROLLER.EditOrNewPersonController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +17,7 @@ public class Main extends Application {
     private Stage activeStage;
     private Stage primaryStage;
     private static Main instance;
+    private EditOrNewPersonController editOrNewPersonController;
 
     /**
      * Grab a singleton instance to make sure it gets instantiated for child controllers.
@@ -73,6 +75,10 @@ public class Main extends Application {
         launch(args);
     }
 
+    public EditOrNewPersonController getEditOrNewPersonController() {
+        return editOrNewPersonController;
+    }
+
     /**
      * Change the current stage to the specified fxml.
      *
@@ -97,6 +103,8 @@ public class Main extends Application {
             getActiveStage().centerOnScreen();
             //System.out.println(String.format("Changing stage to: %s", getActiveStage()));
         }
+        if(title.equals("Edit Person"))
+        editOrNewPersonController = loader.getController();
         return loader.getController();
     }
 

@@ -72,7 +72,7 @@ public class EditOrNewPersonController {
      */
     public void confirm() {
         if (!idField.getText().isEmpty() && !firstNameField.getText().isEmpty() && !lastNameField.getText().isEmpty()) {
-            if(!checkIdIsNumber(idField.getId()))
+            if(!checkIdIsNumber(idField.getText()))
                 return;
             if (student == null) {
                 attendanceOverviewController.getStudentList().add(new Student(Integer.parseInt(idField.getText()), firstNameField.getText(), lastNameField.getText(), pictureUrlField.getText()));
